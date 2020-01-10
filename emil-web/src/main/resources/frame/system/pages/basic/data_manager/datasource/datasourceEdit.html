@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据源修改</title>
+    <% include("../../../../../layout/css.html"){} %>
+</head>
+<body>
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<form class="layui-form model-form" lay-filter="datasourceForm">
+    <input type="text" name="dsId" class="layui-input layui-hide">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">数据源名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="dsName" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">数据源类型</label>
+            <div class="layui-input-inline">
+                <input type="text" name="dsType" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">登录账户</label>
+            <div class="layui-input-inline">
+                <input type="text" name="loginUser" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">登录密码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="loginPwd" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">服务器名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="serviceName" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">数据库名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="dbName" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-row layui-col-xs12">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="datasourceEdit">修改</button>
+            <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">取消</button>
+        </div>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../../../../layout/js.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin','Util'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var Util = layui.Util;
+        var dsId = Util.getUrlParams('id');
+        $('#dsId').val(dsId);
+        $.post("getInfoById", {dsId: dsId}, function (res) {
+            form.val('datasourceForm', res);
+            form.render();
+        }, 'json');
+
+        form.on("submit(datasourceEdit)", function (data) {
+            layer.load(2);
+            $.post("update", data.field, function (res) {
+                layer.closeAll('loading');
+                if (res.code == 200) {
+                    layer.msg(res.msg, {icon: 1});
+                    setTimeout(function () {
+                        parent.location.reload();
+                    }, 500);
+                } else if (res.code == 500) {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            }, 'json');
+            return false;
+        })
+    });
+</script>
+</body>
+</html>

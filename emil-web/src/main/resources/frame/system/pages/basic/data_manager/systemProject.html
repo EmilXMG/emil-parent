@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>程序项目</title>
+    <% include("../../../../layout/css.html"){} %>
+</head>
+<body>
+
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="layui-form toolbar">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <button class="layui-btn icon-btn" lay-filter="systemProjectSubmit" lay-submit>
+                            <i class="layui-icon">&#xe654;</i>新增
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <form id="modelSytemProjectForm" lay-filter="modelSytemProjectForm" class="layui-form">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">项目中文名</label>
+                        <div class="layui-input-inline">
+                            <input id="chineseName" type="text" name="chineseName" lay-verify="required"
+                                   required autocomplete="off"
+                                   class="layui-input" lay-reqtext="用户名是必填项，岂能为空？">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">项目英文名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="englishName" autocomplete="off"
+                                   lay-verify="required|number"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">项目路径</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="path" autocomplete="off"
+                                   lay-verify="required|number"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <table class="layui-table" id="tableSystemProject" lay-filter="tableSystemProject"></table>
+        </div>
+    </div>
+</div>
+<!--    </div>-->
+<!--</div>-->
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBarSystemProject">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- js部分 -->
+<% include("../../../../layout/js.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'dtree', "admin","Util"], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var dtree = layui.dtree;
+        var admin = layui.admin;
+        var Util = layui.Util;
+
+        // 渲染表格
+        var insTb = table.render({
+            elem: '#tableSystemProject',
+            url: 'sysProject/list',
+            page: true,
+            cellMinWidth: 150,
+            cols: [[
+                {type: 'checkbox'},
+                {type: 'numbers', title: '序'},
+                {field: 'chineseName', align: 'center', edit: 'text', sort: true, title: '项目中文名称'},
+                {field: 'englishName', align: 'center', sort: true, title: '项目英文名称'},
+                {field: 'path', align: 'center', edit: 'text', sort: true, title: '项目路径'},
+                {
+                    sort: true, align: 'center', templet: function (d) {
+                        return util.toDateString(d.createDate);
+                    }, title: '创建时间'
+                },
+                {align: 'center', toolbar: '#tableBarSystemProject', title: '操作', minWidth: 120}
+            ]]
+        });
+        // 搜索按钮点击事件
+        form.on('submit(formSubSearchTbLtrt)', function (data) {
+            insTb.reload({where: data.field}, 'data');
+        });
+
+        //添加程序项目
+        form.on('submit(systemProjectSubmit)', function (data) {
+            layer.load(2);
+            var dataField = Util.getJsonString('modelSytemProjectForm');
+            $.post("sysProject/add", dataField, function (res) {
+                layer.closeAll('loading');
+                if (res.code == 200) {
+                    layer.msg(res.msg, {icon: 1});
+                    insTb.reload();
+                } else if (res.code == 1) {
+                    layer.msg(res.msg, {icon: 0});
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            }, 'json');
+            return false;
+        });
+
+        // 删除程序项目
+        function doDel(projectId, chineseName) {
+            layer.confirm('确定要删除“' + chineseName + '”吗？', {
+                shade: .1,
+                skin: 'layui-layer-admin'
+            }, function (index) {
+                layer.close(index);
+                layer.load(2);
+                $.post('sysProject/delete', {
+                    projectId: projectId
+                }, function (res) {
+                    layer.closeAll('loading');
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload();
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            });
+        }
+
+        // 工具条点击事件
+        table.on('tool(tableSystemProject)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                // showEditModel(data);
+            } else if (layEvent === 'del') { // 删除
+                doDel(data.projectId, data.chineseName);
+            }
+        });
+        table.on('edit(tableSystemProject)', function (obj) {
+            let value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field; //得到字段
+            let chineseName = '';
+            let orderNum = '';
+            if (field === 'chineseName') {
+                chineseName = value;
+                $.post('subsystem/update', {
+                    projectId: data.projectId, chineseName: chineseName
+                }, function (res) {
+                    layer.closeAll('loading');
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload();
+                    } else if (res.code == 1) {
+                        layer.msg(res.msg, {icon: 0});
+                        insTb.reload();
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            } else if (field === 'orderNum') {
+                orderNum = value;
+                $.post('subsystem/update', {
+                    projectId: data.projectId, orderNum: orderNum,
+                }, function (res) {
+                    layer.closeAll('loading');
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload();
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                        insTb.reload();
+                    }
+                }, 'json');
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wf.ew.system.mapper.CodeMainMapper">
+
+    <select id="listFull" resultType="com.wf.ew.system.entity.CodeMain">
+        SELECT *
+        FROM code_main
+        <where>
+            <if test="page.pageData.subsystemNum!=null and page.pageData.subsystemNum!='EMILROOT'">
+                and subsystem_num = '${page.pageData.subsystemNum}'
+            </if>
+            <if test="page.pageData.codeName!=null">
+                and code_name like '%${page.pageData.codeName}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="getCodeMainName" resultType="com.wf.ew.system.entity.CodeMain">
+        SELECT code_name FROM code_main
+    </select>
+</mapper>

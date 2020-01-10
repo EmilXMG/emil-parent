@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wf.ew.system.mapper.SysProjectMapper">
+
+    <select id="listFull" resultType="com.wf.ew.system.entity.SysProject">
+        SELECT *
+        FROM sys_project
+    </select>
+
+    <select id="getSystemProjectNameAndId" resultType="com.wf.ew.system.entity.SysProject">
+        SELECT project_id,chinese_name,path
+        FROM sys_project
+    </select>
+</mapper>

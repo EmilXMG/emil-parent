@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wf.ew.system.mapper.SysMemoMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+            rowGuid, operateUserName, operateDate, user_id, memo_content, create_date
+        </sql>
+    <!--  便签信息列表  -->
+    <select id="listFull" resultType="com.wf.ew.system.entity.SysMemo">
+        select * from sys_memo
+    </select>
+
+    <select id="getSysMemoByUserId" resultType="com.wf.ew.system.entity.SysMemo" parameterType="java.lang.Integer">
+        select * from sys_memo where user_id = #{loginUserId,jdbcType=INTEGER} order by create_date desc
+    </select>
+</mapper>

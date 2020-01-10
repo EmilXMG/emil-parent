@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据表添加</title>
+    <% include("../../../../../layout/css.html"){} %>
+</head>
+<body>
+<form class="layui-form model-form">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">数据表中文</label>
+            <div class="layui-input-inline">
+                <input type="text" name="tableName" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">SQL数据表</label>
+            <div class="layui-input-inline">
+                <input type="text" name="sqlTableName" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-row">
+            <label class="layui-form-label">数据源</label>
+            <div class="layui-input-inline">
+                <select id="dsSelect" name="dsId" lay-filter="">
+                    <option value=""></option>
+                </select>
+            </div>
+            <input id="subsystem_num" type="text" name="subsystemNum"
+                   class="layui-input layui-hide">
+        </div>
+    </div>
+    <div class="layui-form-item layui-row layui-col-xs12">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="systemTableAdd">立即添加</button>
+            <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">取消</button>
+        </div>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../../../../layout/js.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin','Util'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var Util = layui.Util;
+        var subsystemNum = Util.getUrlParams('subsystemId');
+        $('#subsystem_num').val(subsystemNum);
+        //渲染下拉列表
+        $.post("getDsNameAndId", function (res) {
+            $.each(res, function (index, item) {
+                $('#dsSelect').append(new Option(item.dsName, item.dsId));//往下拉菜单里添加元素
+            });
+            form.render('select');
+        }, 'json');
+        //新增数据表
+        form.on("submit(systemTableAdd)", function (data) {
+            layer.load(2);
+            $.post("add", data.field, function (res) {
+                layer.closeAll('loading');
+                if (res.code == 200) {
+                    layer.msg(res.msg, {icon: 1});
+                    parent.location.reload();
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            }, 'json');
+            return false;
+        })
+    });
+</script>
+</body>
+</html>

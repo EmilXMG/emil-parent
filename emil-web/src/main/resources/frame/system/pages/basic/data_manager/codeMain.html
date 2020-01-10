@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>代码项管理</title>
+    <link rel="stylesheet" href="../../../assets/module/dtree/dtree.css"/>
+    <link rel="stylesheet" href="../../../assets/module/dtree/font/dtreefont.css"/>
+    <% include("../../../../layout/css.html"){} %>
+    <style>
+        #treeTbTree {
+            height: 535px;
+            overflow: auto;
+        }
+
+        @media screen and (max-width: 768px) {
+            #treeTbTree {
+                height: auto;
+            }
+        }
+
+        /** dtree选中颜色重写 */
+        .dtree-theme-item-this {
+            background-color: #eeeeee !important;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <!-- 左树 -->
+        <div class="layui-col-sm12 layui-col-md4 layui-col-lg3">
+            <div class="layui-card">
+                <div class="layui-card-body mini-bar" id="treeTbTree">
+                </div>
+            </div>
+        </div>
+        <!-- 右表 -->
+        <div class="layui-col-sm12 layui-col-md8 layui-col-lg9">
+            <div class="layui-card">
+                <div class="layui-card-body" style="min-height: 535px;">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <div class="layui-input-inline mr0">
+                                    <input name="codeName" class="layui-input" type="text" placeholder="输入代码项名称"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn icon-btn" lay-filter="formSubSearchTbLtrt" lay-submit>
+                                    <i class="layui-icon">&#xe615;</i>搜索
+                                </button>
+                                <button class="layui-btn icon-btn" lay-filter="codeMainSubmit" lay-submit>
+                                    <i class="layui-icon">&#xe654;</i>新增
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <form id="modelcodeMainForm" lay-filter="modelcodeMainForm" class="layui-form">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">代码项名称</label>
+                                <div class="layui-input-inline">
+                                    <input id="codeName" type="text" name="codeName"  autocomplete="off"
+                                           class="layui-input" >
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">代码说明</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="description" autocomplete="off"
+                                           class="layui-input">
+                                    <input id="subsystem_num" type="text" name="subsystemNum"
+                                           class="layui-input layui-hide">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                  <table class="layui-table" id="tableCodeMain" lay-filter="tableCodeMain"></table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBarTbTree">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">子项管理</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!-- js部分 -->
+<% include("../../../../layout/js.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'dtree', 'admin','Util'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var dtree = layui.dtree;
+        var admin = layui.admin;
+        var Util = layui.Util;
+
+
+
+        // 渲染表格
+        var insTb = table.render({
+            elem: '#tableCodeMain',
+            url: 'codeMain/list',
+            page: true,
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'codeName', align: 'center', sort: true, edit: 'text', title: '代码项名称'},
+                {field: 'description', align: 'center', sort: true, edit: 'text', title: '代码说明'},
+                {
+                    sort: true, align: 'center', templet: function (d) {
+                        return util.toDateString(d.createDate);
+                    }, title: '创建时间'
+                },
+                {align: 'center', toolbar: '#tableBarTbTree', title: '操作', minWidth: 120}
+            ]]
+        });
+        // 树形渲染
+        dtree.render({
+            elem: '#treeTbTree',
+            url: 'codeMain/dtree',
+            type: 'all',
+            initLevel: '2',
+            dot: false,
+            method: 'GET'
+        });
+
+        // 树形点击事件
+        dtree.on('node("treeTbTree")', function (obj) {
+            var data = obj.param;
+            $('#subsystem_num').val(data.nodeId);
+            insTb.reload({where: {subsystemNum: data.nodeId}}, 'data');
+        });
+
+        // 搜索按钮点击事件
+        form.on('submit(formSubSearchTbLtrt)', function (data) {
+            insTb.reload({where: data.field}, 'data');
+        });
+
+        //添加代码项
+        form.on('submit(codeMainSubmit)', function (data) {
+            var subsystem = Util.getValue('subsystem_num');
+            if (subsystem === '' || subsystem === 'EMILROOT') {
+                layer.msg('请选择子系统!', {icon: 0});
+                return false;
+            }
+            layer.load(2);
+            var dataField = Util.getJsonString('modelcodeMainForm');
+            $.post("codeMain/add", dataField, function (res) {
+                layer.closeAll('loading');
+                if (res.code == 200) {
+                    layer.msg(res.msg, {icon: 1});
+                    insTb.reload();
+                } else if (res.code == 1) {
+                    layer.msg(res.msg, {icon: 0});
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            }, 'json');
+            return false;
+        });
+
+        // 删除代码项
+        function doDel(codeId, codeName) {
+            layer.confirm('确定要删除“' + codeName + '”吗？', {
+                shade: .1,
+                skin: 'layui-layer-admin'
+            }, function (index) {
+                layer.close(index);
+                layer.load(2);
+                $.post('codeMain/delete', {
+                    codeId: codeId
+                }, function (res) {
+                    layer.closeAll('loading');
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload();
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            });
+        }
+        // 工具条点击事件
+        table.on('tool(tableCodeMain)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                admin.open({
+                    type: 2,
+                    title: "代码子项管理",
+                    shadeClose: true,
+                    shade: 0.7,
+                    anim: 1,
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['900px', '650px'],
+                    content: "/system/codeItem?rowGuid=" + data.codeId,
+                });
+            } else if (layEvent === 'del') { // 删除
+                doDel(data.codeId, data.codeName);
+            }
+        });
+
+        table.on('edit(tableCodeMain)', function (obj) {
+            let value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field; //得到字段
+            let codeName = '';
+            let description = '';
+            if (field === 'codeName') {
+                codeName = value;
+                $.post('codeMain/update', {
+                    codeId: data.codeId, codeName: codeName
+                }, function (res) {
+                    layer.closeAll('loading');
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload();
+                    } else if (res.code == 1) {
+                        layer.msg(res.msg, {icon: 0});
+                        insTb.reload();
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                        insTb.reload();
+                    }
+                }, 'json');
+            } else if (field === 'description') {
+                description = value;
+                $.post('codeMain/update', {
+                    codeId: data.codeId, description: description,
+                }, function (res) {
+                    layer.closeAll('loading');
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload();
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                        insTb.reload();
+                    }
+                }, 'json');
+            }
+        });
+    });
+</script>
+</body>
+</html>

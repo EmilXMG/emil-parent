@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>${table.entityPath}新增</title>
+    <% include("../../../layout/css.html"){} %>
+</head>
+<body>
+<form class="layui-form model-form">
+
+    <div class="layui-form-item">
+        <#list table.fields as field>
+            <#if !field.keyFlag><#--生成普通字段 -->
+                <div class="layui-inline">
+                    <label class="layui-form-label">${field.comment}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="${field.propertyName}" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </#if>
+        </#list>
+    </div>
+
+    <div class="layui-form-item layui-row layui-col-xs12">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="${table.entityPath}Add">添加</button>
+            <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../../layout/js.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin','Util'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var Util = layui.Util;
+
+        form.on("submit(${table.entityPath}Add)", function (data) {
+            layer.load(2);
+            $.post("${table.entityPath}Add", data.field, function (res) {
+                layer.closeAll('loading');
+                if (res.code == 200) {
+                    layer.msg(res.msg, {icon: 1});
+                    parent.location.reload();
+                } else if (res.code == 500) {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            }, 'json');
+            return false;
+        })
+    });
+</script>
+</body>
+</html>

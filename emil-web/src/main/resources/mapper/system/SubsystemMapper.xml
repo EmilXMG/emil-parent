@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wf.ew.system.mapper.SubSystemMapper">
+    <select id="listFull" resultType="com.wf.ew.system.entity.Subsystem">
+        SELECT *
+        FROM sys_subsystem
+    </select>
+
+    <select id="getSubsystemNum" resultType="java.lang.String">
+        SELECT subsystem_num FROM sys_subsystem order by subsystem_num desc LIMIT 0,1
+    </select>
+
+    <select id="getSubsystemName" resultType="com.wf.ew.system.entity.Subsystem">
+        SELECT subsystem_name FROM sys_subsystem
+    </select>
+
+
+    <select id="getSubsystemNameAndNum" resultType="com.wf.ew.system.entity.Subsystem">
+        SELECT subsystem_name,subsystem_num FROM sys_subsystem
+    </select>
+</mapper>
+

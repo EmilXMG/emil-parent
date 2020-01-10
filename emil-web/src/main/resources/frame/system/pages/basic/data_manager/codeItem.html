@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>代码子项管理</title>
+    <% include("../../../../layout/css.html"){} %>
+</head>
+<body>
+
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <!-- 右表 -->
+        <div class="layui-col-sm12 layui-col-md8 layui-col-lg9">
+            <div class="layui-card">
+                <div class="layui-card-body" style="min-height: 535px;">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto">搜索：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input name="codeName" class="layui-input" type="text" placeholder="输入代码项名称"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn icon-btn" lay-filter="formSubSearchTbLtrt" lay-submit>
+                                    <i class="layui-icon">&#xe615;</i>搜索
+                                </button>
+                                <button class="layui-btn icon-btn" lay-filter="codeItemSubmit" lay-submit>
+                                    <i class="layui-icon">&#xe654;</i>新增
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <form id="modelcodeItemForm" lay-filter="modelcodeItemForm" class="layui-form">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">代码项文本</label>
+                                <div class="layui-input-inline">
+                                    <input id="itemText" type="text" name="itemText" lay-verify="required"
+                                           required autocomplete="off"
+                                           class="layui-input" lay-reqtext="用户名是必填项，岂能为空？">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">代码项值</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="itemValue" autocomplete="off"
+                                           lay-verify="required|number"
+                                           class="layui-input">
+                                    <input id="codeId" type="text" name="codeId"
+                                           class="layui-input layui-hide">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="layui-table" id="tableTbTree" lay-filter="tableTbTree"></table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- 表格操作列 -->
+<script type="text/html" id="tableBarTbTree">
+    <!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">子项管理</a>-->
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!-- js部分 -->
+<% include("../../../../layout/js.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'dtree', 'admin','Util'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var dtree = layui.dtree;
+        var admin = layui.admin;
+        var Util = layui.Util;
+        var codeId = Util.getUrlParams("rowGuid");
+        $('#codeId').val(codeId);
+        // 渲染表格
+        var insTb = table.render({
+            elem: '#tableTbTree',
+            url: 'codeItem/list',
+            page: true,
+            where: {codeId: codeId},
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'itemText', align: 'center', sort: true, edit: 'text', title: '代码项名称'},
+                {field: 'itemValue', align: 'center', sort: true, edit: 'text', title: '代码项值'},
+                {
+                    sort: true, align: 'center', templet: function (d) {
+                        return util.toDateString(d.createDate);
+                    }, title: '创建时间'
+                },
+                {align: 'center', toolbar: '#tableBarTbTree', title: '操作', minWidth: 120}
+            ]]
+        });
+
+        // 搜索按钮点击事件
+        form.on('submit(formSubSearchTbLtrt)', function (data) {
+            insTb.reload({where: data.field}, 'data');
+        });
+
+        //添加代码项
+        form.on('submit(codeItemSubmit)', function (data) {
+            var subsystem = Util.getValue('subsystem_num');
+            if (subsystem === '' || subsystem === 'EMILROOT') {
+                layer.msg('请选择子系统!', {icon: 0});
+                return false;
+            }
+            layer.load(2);
+            var dataField = Util.getJsonString('modelcodeItemForm');
+            $.post("codeItem/add", dataField, function (res) {
+                layer.closeAll('loading');
+                if (res.code == 200) {
+                    layer.msg(res.msg, {icon: 1});
+                    insTb.reload();
+                } else if (res.code == 1) {
+                    layer.msg(res.msg, {icon: 0});
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            }, 'json');
+            return false;
+        });
+
+        // 删除代码项
+        function doDel(itemId, itemValue) {
+            layer.confirm('确定要删除“' + itemValue + '”吗？', {
+                shade: .1,
+                skin: 'layui-layer-admin'
+            }, function (index) {
+                layer.close(index);
+                layer.load(2);
+                $.post('codeItem/delete', {
+                    itemId: itemId
+                }, function (res) {
+                    layer.closeAll('loading');
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        insTb.reload();
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            });
+        }
+
+        // 工具条点击事件
+        table.on('tool(tableTbTree)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'edit') { // 修改
+                admin.open({
+                    type: 2,
+                    title: "代码子项管理",
+                    shadeClose: true,
+                    shade: 0.7,
+                    anim: 1,
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['893px', '450px'],
+                    content: "/system/codeItem?rowGuid=",
+                });
+            } else if (layEvent === 'del') { // 删除
+                doDel(data.itemId, data.itemText);
+            }
+        });
+    });
+</script>
+</body>
+</html>
