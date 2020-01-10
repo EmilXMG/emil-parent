@@ -30,10 +30,6 @@
                         <button class="layui-btn icon-btn" lay-filter="${table.entityPath}Search" lay-submit>
                             <i class="layui-icon">&#xe615;</i>搜索
                         </button>
-                        <button id="systemTableAdd" class="layui-btn icon-btn" lay-filter="codeMainSubmit"
-                                lay-submit>
-                            <i class="layui-icon">&#xe654;</i>新增
-                        </button>
                     </div>
                     <div class="layui-inline">
                         <button id="${table.entityPath}Add" class="layui-btn icon-btn" lay-submit>
