@@ -77,6 +77,11 @@ public class User implements Serializable {
     private String trueName;
 
     /**
+     * 标签
+     */
+    private String tags;
+
+    /**
      * 身份证号
      */
     private String idCard;
@@ -86,10 +91,19 @@ public class User implements Serializable {
      */
     private LocalDate birthday;
 
+
+    /**
+     * 住址
+     */
+    private String address;
+
     /**
      * 部门id
      */
     private Integer departmentId;
+
+
+    private String description;
 
     /**
      * 状态，0正常，1冻结
@@ -189,6 +203,14 @@ public class User implements Serializable {
         this.trueName = trueName;
     }
 
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
     public String getIdCard() {
         return idCard;
     }
@@ -205,12 +227,28 @@ public class User implements Serializable {
         this.birthday = birthday;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public Integer getDepartmentId() {
         return departmentId;
     }
 
     public void setDepartmentId(Integer departmentId) {
         this.departmentId = departmentId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getState() {
@@ -258,9 +296,12 @@ public class User implements Serializable {
                 ", email=" + email +
                 ", emailVerified=" + emailVerified +
                 ", trueName=" + trueName +
+                ", tags=" + tags +
                 ", idCard=" + idCard +
                 ", birthday=" + birthday +
+                ", address=" + address +
                 ", departmentId=" + departmentId +
+                ", description=" + description +
                 ", state=" + state +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +

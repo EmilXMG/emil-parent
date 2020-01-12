@@ -132,18 +132,13 @@
                         </div>
                         <div class="info-list-item">
                             <i class="layui-icon layui-icon-location" style="cursor: pointer" id="openMap"></i>
-                            <p>浙江省杭州市</p>
+                            <p id="address"></p>
                         </div>
                     </div>
                     <div class="dash"></div>
                     <h3>标签</h3>
                     <div class="layui-badge-list" style="padding-top: 6px;">
-                        <span class="layui-badge layui-bg-gray">很有想法的</span>
-                        <span class="layui-badge layui-bg-gray">专注设计</span>
-                        <span class="layui-badge layui-bg-gray">辣~</span>
-                        <span class="layui-badge layui-bg-gray">大长腿</span>
-                        <span class="layui-badge layui-bg-gray">川妹子</span>
-                        <span class="layui-badge layui-bg-gray">海纳百川</span>
+                        <input id="tagsInput" class="layui-hide"/>
                     </div>
                 </div>
             </div>
@@ -160,9 +155,8 @@
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
                                 <div class="layui-form user-info-form">
-                                    <form class="layui-form model-form" lay-filter="userInfoForm">
-                                        <input type="text"  name="userId" class="layui-input layui-hide">
-                                        <input type="text"   name="address" class="layui-input layui-hide">
+                                    <form id="userInfo" class="layui-form model-form" lay-filter="userInfoForm">
+                                        <input type="text" name="userId" class="layui-input layui-hide">
                                         <div class="layui-form-item">
                                             <div class="layui-inline">
                                                 <label class="layui-form-label">用户名:</label>
@@ -181,17 +175,17 @@
                                         </div>
                                         <div class="layui-form-item">
                                             <div class="layui-inline">
+                                                <label class="layui-form-label">真实姓名:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="trueName"
+                                                           class="layui-input" lay-verify="required" required/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
                                                 <label class="layui-form-label">性别:</label>
                                                 <div class="layui-input-inline">
                                                     <input type="radio" name="sex" value="男" title="男" checked/>
                                                     <input type="radio" name="sex" value="女" title="女"/>
-                                                </div>
-                                            </div>
-                                            <div class="layui-inline">
-                                                <label class="layui-form-label">登录名:</label>
-                                                <div class="layui-input-inline">
-                                                    <input type="text" name="username"
-                                                           class="layui-input" lay-verify="required" required/>
                                                 </div>
                                             </div>
                                         </div>
@@ -214,7 +208,7 @@
                                         <div class="layui-form-item">
                                             <label class="layui-form-label">个人简介:</label>
                                             <div class="layui-input-block">
-                                                <textarea name="desc" placeholder="个人简介"
+                                                <textarea name="description" placeholder="个人简介"
                                                           class="layui-textarea"></textarea>
                                             </div>
                                         </div>
@@ -281,18 +275,21 @@
 <% include("../layout/js.html"){} %>
 
 <script>
-    layui.use(['layer', 'form', 'element', 'admin'], function () {
+    layui.use(['layer', 'form', 'element', 'admin', 'Util', 'tagsInput', 'Util'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var element = layui.element;
         var admin = layui.admin;
-
+        var tagsInput = layui.tagsInput;
+        var Util = layui.Util;
+        // 根据用户ID获取用户信息
         $.post('userCenter/getUserById', function (res) {
             var userInfo = res.data;
             $('#username').text(userInfo.username);
             $('#userId').text(userInfo.userId);
-            $('#address').text(res.data.address);
+            $('#address').text(userInfo.address);
+            $('#tagsInput').importTags(userInfo.tags);
             form.val('userInfoForm', res.data);
             form.render();
         }, 'json');
@@ -314,21 +311,69 @@
             return false;
         });
 
+        function updateUserLeftInfo(userLeftInfo) {
+            $.post("userCenter/updateUser", userLeftInfo, function (res) {
+                layer.closeAll('loading');
+                if (res.code == 200) {
+                    layer.msg(res.msg, {icon: 1});
+                    setTimeout(function () {
+                        location.reload();
+                    }, 500);
+                } else if (res.code == 500) {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            }, 'json');
+        }
+
         // 地图选择位置
         $('#openMap').click(function () {
             admin.chooseLocation({
                 needCity: true,
                 onSelect: function (res) {
-                    var address = res.city.province+res.city.city+res.city.district;
-                    console.log(address);
-                    $('#address').text(address);
+                    var address = res.city.province + res.city.city + res.city.district + res.name + res.address;
+                    var userData = $.param({'address': address}) + '&' + $('#userInfo').serialize();
+                    updateUserLeftInfo(userData);
                 }
             });
         });
+
+        // 增加标签
+        $('#tagsInput').tagsInput({
+            skin: 'tagsinput-default',
+            width: 'auto',
+            onAddTag: function (tag) {
+                var tagData = Util.getValue('tagsInput');
+                var tagDataLength = tagData.split(',').length;
+                if (tagDataLength <= 10) {
+                    var userData = $.param({'tags': tagData}) + '&' + $('#userInfo').serialize();
+                    updateUserLeftInfo(userData);
+                } else {
+                    layer.msg('最多只能输入10个标签', {icon: 1});
+                }
+            },
+            onRemoveTag: function (tag) {
+                var tagData = Util.getValue('tagsInput');
+                var userData = $.param({'tags': tagData}) + '&' + $('#userInfo').serialize();
+                updateUserLeftInfo(userData);
+            },
+            maxChars: 5
+        });
+
         // 选择头像
         $('#imgHead').click(function () {
             admin.cropImg({
                 onCrop: function (res) {
+                    $.post("userCenter/updateAvatar", JSON.stringify({file: res}), function (res) {
+                        layer.closeAll('loading');
+                        if (res.code == 200) {
+                            layer.msg(res.msg, {icon: 1});
+                            setTimeout(function () {
+                                location.reload();
+                            }, 500);
+                        } else if (res.code == 500) {
+                            layer.msg(res.msg, {icon: 2});
+                        }
+                    }, 'json');
                     $('#imgHead>img').attr('src', res);
                 }
             });
