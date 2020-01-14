@@ -71,7 +71,7 @@
 <!-- js部分 -->
 <% include("../../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'dtree', "admin","Util"], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'dtree', "admin","emil"], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -79,7 +79,7 @@
         var util = layui.util;
         var dtree = layui.dtree;
         var admin = layui.admin;
-        var Util = layui.Util;
+        var emil = layui.emil;
 
         // 渲染表格
         var insTb = table.render({
@@ -87,6 +87,7 @@
             url: 'sysProject/list',
             page: true,
             cellMinWidth: 150,
+            height:'full-180',
             cols: [[
                 {type: 'checkbox'},
                 {type: 'numbers', title: '序'},
@@ -109,7 +110,7 @@
         //添加程序项目
         form.on('submit(systemProjectSubmit)', function (data) {
             layer.load(2);
-            var dataField = Util.getJsonString('modelSytemProjectForm');
+            var dataField = emil.getJsonString('modelSytemProjectForm');
             $.post("sysProject/add", dataField, function (res) {
                 layer.closeAll('loading');
                 if (res.code == 200) {

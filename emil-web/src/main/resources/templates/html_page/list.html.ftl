@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <table class="layui-table" lay-data="{ url:'${table.entityPath}/${table.entityPath}List',
+            <table class="layui-table" lay-data="{ url:'${table.entityPath}/${table.entityPath}List',height: 'full-100',
             page:true,toolbar: true, id:'${table.entityPath}Table'}" lay-filter="${table.entityPath}Table">
                 <thead>
                 <tr>
@@ -69,14 +69,14 @@
 <!-- js部分 -->
 <% include("../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin','Util'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin','emil'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var table = layui.table;
         var util = layui.util;
         var admin = layui.admin;
-        var Util = layui.Util;
+        var emil = layui.emil;
 
         // 搜索按钮点击事件
         form.on('submit(${table.entityPath}Search)', function (data) {

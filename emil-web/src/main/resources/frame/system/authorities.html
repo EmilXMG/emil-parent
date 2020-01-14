@@ -90,7 +90,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">菜单图标</label>
             <div class="layui-input-block">
-                <input name="menuIcon" placeholder="请输入菜单图标" type="text" class="layui-input"/>
+                <input id="iconPicker" lay-filter="iconPicker" name="icon" value=""  type="text" class="layui-input"/>
             </div>
         </div>
         <div class="layui-form-item">
@@ -110,7 +110,7 @@
 <!-- js部分 -->
 <% include("../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'admin', 'treetable','dtree'], function () {
+    layui.use(['layer', 'form', 'table', 'admin', 'treetable','dtree','iconPicker','element','jquery'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -118,6 +118,9 @@
         var admin = layui.admin;
         var dtree = layui.dtree;
         var treetable = layui.treetable;
+        var iconPicker = layui.iconPicker;
+        var element = layui.element;
+        var $ = layui.jquery;
 
         // 渲染表格
         function renderTable() {
@@ -129,6 +132,7 @@
                 elem: '#authTable',
                 url: 'authorities/list',
                 cellMinWidth: 100,
+                height:'full-100',
                 cols: [[
                     {type: 'numbers'},
                     {field: 'authorityName', title: '权限名称', minWidth: 200},
@@ -147,6 +151,23 @@
         }
 
         renderTable();
+
+        iconPicker.render({
+            // 选择器，推荐使用input
+            elem: '#iconPicker',
+            // 数据类型：fontClass/unicode，推荐使用fontClass
+            type: 'fontClass',
+            // 是否开启搜索：true/false
+            search: true,
+            // 是否开启分页
+            page: true,
+            // 每页显示数量，默认12
+            limit: 12,
+            // 点击回调
+            click: function (data) {
+                console.log(data);
+            }
+        });
 
         // 添加按钮点击事件
         $('#btnAdd').click(function () {
@@ -230,8 +251,7 @@
             });
         }
 
-        //为查询按钮添加回车事件
-        // admin.enterKeymap("#btnSearch");
+        iconPicker.checkIcon("iconFonts","{$info.icon}","layui_icon");
 
         // 搜索按钮点击事件
         $('#btnSearch').click(function () {

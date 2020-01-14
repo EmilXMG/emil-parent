@@ -128,11 +128,12 @@
         var tableX = layui.tableX;
 
         // 渲染表格
-        var insTb = tableX.render({
+        var insTb = table.render({
             elem: '#userTable',
             url: 'user/list',
             page: true,
             toolbar: true,
+            height:'full-100',
             cellMinWidth: 100,
             cols: [[
                 {type: 'numbers'},

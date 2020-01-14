@@ -31,14 +31,14 @@
 <!-- js部分 -->
 <% include("../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin','Util'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin','emil'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var table = layui.table;
         var util = layui.util;
         var admin = layui.admin;
-        var Util = layui.Util;
+        var emil = layui.emil;
 
         form.on("submit(${table.entityPath}Add)", function (data) {
             layer.load(2);

@@ -95,7 +95,7 @@
 <!-- js部分 -->
 <% include("../../../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'dtree', 'admin','Util'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'dtree', 'admin','emil'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -103,13 +103,14 @@
         var util = layui.util;
         var dtree = layui.dtree;
         var admin = layui.admin;
-        var Util = layui.Util;
+        var emil = layui.emil;
         // 渲染表格
         var insTb = table.render({
             elem: '#tableSystemTable',
             url: 'table-basicinfo/list',
             page: true,
             cellMinWidth: 100,
+            height:'full-100',
             cols: [[
                 {type: 'checkbox'},
                 {field: 'tableName', align: 'center', sort: true, edit: 'text', title: '数据表中文名'},
@@ -146,7 +147,7 @@
         });
 
         $("#systemTableAdd").click(function () {
-            var subsystem = Util.getValue('subsystem_num');
+            var subsystem = emil.getValue('subsystem_num');
             if (subsystem === '' || subsystem === 'EMILROOT') {
                 layer.msg('请选择子系统！', {icon: 0});
                 return false;

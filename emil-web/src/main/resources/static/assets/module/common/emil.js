@@ -1,6 +1,6 @@
 layui.define(["jquery"], function (exports) {
     var $ = layui.jquery;
-    let Util = {
+    let emil = {
 
         /**
          * 根据name序列化表单数据
@@ -77,5 +77,5 @@ layui.define(["jquery"], function (exports) {
 
         }
     };
-    exports('Util', Util);
+    exports('emil', emil);
 });

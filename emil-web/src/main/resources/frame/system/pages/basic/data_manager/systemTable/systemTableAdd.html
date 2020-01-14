@@ -44,15 +44,15 @@
 <!-- js部分 -->
 <% include("../../../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin','Util'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin','emil'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var table = layui.table;
         var util = layui.util;
         var admin = layui.admin;
-        var Util = layui.Util;
-        var subsystemNum = Util.getUrlParams('subsystemId');
+        var emil = layui.emil;
+        var subsystemNum = emil.getUrlParams('subsystemId');
         $('#subsystem_num').val(subsystemNum);
         //渲染下拉列表
         $.post("getDsNameAndId", function (res) {

@@ -22,7 +22,8 @@ layui.config({
     CKEDITOR: 'ckeditor/ckeditor',
     Split: 'Split/Split',
     cascader: 'cascader/cascader',
-    Util:'common/Util'
+    emil: 'common/emil',
+    iconPicker: 'iconPicker/iconPicker'
 }).use(['layer', 'admin'], function () {
     var $ = layui.jquery;
     var layer = layui.layer;

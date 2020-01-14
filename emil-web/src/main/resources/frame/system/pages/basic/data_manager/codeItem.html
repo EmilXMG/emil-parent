@@ -79,7 +79,7 @@
 <!-- js部分 -->
 <% include("../../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'dtree', 'admin','Util'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'dtree', 'admin','emil'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -87,8 +87,8 @@
         var util = layui.util;
         var dtree = layui.dtree;
         var admin = layui.admin;
-        var Util = layui.Util;
-        var codeId = Util.getUrlParams("rowGuid");
+        var emil = layui.emil;
+        var codeId = emil.getUrlParams("rowGuid");
         $('#codeId').val(codeId);
         // 渲染表格
         var insTb = table.render({
@@ -97,6 +97,7 @@
             page: true,
             where: {codeId: codeId},
             cellMinWidth: 100,
+            height:'full-180',
             cols: [[
                 {type: 'checkbox'},
                 {field: 'itemText', align: 'center', sort: true, edit: 'text', title: '代码项名称'},
@@ -117,13 +118,13 @@
 
         //添加代码项
         form.on('submit(codeItemSubmit)', function (data) {
-            var subsystem = Util.getValue('subsystem_num');
+            var subsystem = emil.getValue('subsystem_num');
             if (subsystem === '' || subsystem === 'EMILROOT') {
                 layer.msg('请选择子系统!', {icon: 0});
                 return false;
             }
             layer.load(2);
-            var dataField = Util.getJsonString('modelcodeItemForm');
+            var dataField = emil.getJsonString('modelcodeItemForm');
             $.post("codeItem/add", dataField, function (res) {
                 layer.closeAll('loading');
                 if (res.code == 200) {

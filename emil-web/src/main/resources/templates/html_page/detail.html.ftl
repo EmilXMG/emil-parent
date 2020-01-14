@@ -30,16 +30,16 @@
 <!-- js部分 -->
 <% include("../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin','Util'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin','emil'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var table = layui.table;
         var util = layui.util;
         var admin = layui.admin;
-        var Util = layui.Util;
+        var emil = layui.emil;
 
-        var rowGuid = Util.getUrlParams('rowGuid');
+        var rowGuid = emil.getUrlParams('rowGuid');
         $('#rowGuid').val(rowGuid);
 
         //渲染${table.comment!}
