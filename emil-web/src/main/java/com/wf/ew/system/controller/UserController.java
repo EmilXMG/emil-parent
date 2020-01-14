@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 用户管理
@@ -63,6 +64,7 @@ public class UserController extends BaseController {
     @RequestMapping("/add")
     public JsonResult add(User user, String roleIds) {
         user.setState(0);
+        user.setRowGuid(UUID.randomUUID().toString());
         user.setPassword(EndecryptUtil.encrytMd5(DEFAULT_PSW, 3));
         if (userService.addUser(user, getRoleIds(roleIds))) {
             return JsonResult.ok("添加成功，初始密码为" + DEFAULT_PSW);
