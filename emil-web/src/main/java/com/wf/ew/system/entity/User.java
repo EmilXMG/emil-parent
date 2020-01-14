@@ -31,6 +31,12 @@ public class User implements Serializable {
     @TableId(value = "user_id", type = IdType.AUTO)
     private Integer userId;
 
+
+    /**
+     * 全局唯一标识
+     */
+    private String rowGuid;
+
     /**
      * 账号
      */
@@ -125,6 +131,14 @@ public class User implements Serializable {
 
     public Integer getUserId() {
         return userId;
+    }
+
+    public String getRowGuid() {
+        return rowGuid;
+    }
+
+    public void setRowGuid(String rowGuid) {
+        this.rowGuid = rowGuid;
     }
 
     public void setUserId(Integer userId) {

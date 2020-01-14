@@ -230,6 +230,7 @@
 
         // 导航小三角
         var navArrow = layui.data(admin.tableName).navArrow;
+        console.log(navArrow);
         $('[name="navArrow"][value="' + (navArrow ? navArrow : '') + '"]').prop('checked', 'true');
         form.on('radio(navArrow)', function (data) {
             layui.data(admin.tableName, {key: 'navArrow', value: data.value});

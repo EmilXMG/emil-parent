@@ -275,14 +275,14 @@
 <% include("../layout/js.html"){} %>
 
 <script>
-    layui.use(['layer', 'form', 'element', 'admin', 'Util', 'tagsInput', 'Util'], function () {
+    layui.use(['layer', 'form', 'element', 'admin', 'emil', 'tagsInput'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var element = layui.element;
         var admin = layui.admin;
         var tagsInput = layui.tagsInput;
-        var Util = layui.Util;
+        var emil = layui.emil;
         // 根据用户ID获取用户信息
         $.post('userCenter/getUserById', function (res) {
             var userInfo = res.data;
@@ -342,7 +342,7 @@
             skin: 'tagsinput-default',
             width: 'auto',
             onAddTag: function (tag) {
-                var tagData = Util.getValue('tagsInput');
+                var tagData = emil.getValue('tagsInput');
                 var tagDataLength = tagData.split(',').length;
                 if (tagDataLength <= 10) {
                     var userData = $.param({'tags': tagData}) + '&' + $('#userInfo').serialize();
@@ -352,7 +352,7 @@
                 }
             },
             onRemoveTag: function (tag) {
-                var tagData = Util.getValue('tagsInput');
+                var tagData = emil.getValue('tagsInput');
                 var userData = $.param({'tags': tagData}) + '&' + $('#userInfo').serialize();
                 updateUserLeftInfo(userData);
             },
