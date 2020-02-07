@@ -10,9 +10,19 @@
             <if test="page.pageData.codeId!=null">
                 and code_id = '${page.pageData.codeId}'
             </if>
-<!--            <if test="page.pageData.codeName!=null">-->
-<!--                and code_name like '%${page.pageData.codeName}%'-->
-<!--            </if>-->
+            <if test="page.pageData.itemText!=null">
+                and item_text like '%${page.pageData.itemText}%'
+            </if>
         </where>
+    </select>
+    <!--获取代码项子级的数量-->
+    <select id="getCodeItemCount" resultType="java.lang.Integer">
+        select count(1) from code_items where code_id = #{codeId,jdbcType=INTEGER}
+    </select>
+
+    <!--获取当前代码项下的子项-->
+    <select id="getCodeItemByMainId" resultType="com.wf.ew.system.entity.CodeItem">
+        select * from code_items where code_id = #{codeId,jdbcType=INTEGER}
+
     </select>
 </mapper>

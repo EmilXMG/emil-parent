@@ -112,8 +112,6 @@
         var admin = layui.admin;
         var emil = layui.emil;
 
-
-
         // 渲染表格
         var insTb = table.render({
             elem: '#tableCodeMain',
@@ -245,7 +243,7 @@
             } else if (field === 'description') {
                 description = value;
                 $.post('codeMain/update', {
-                    codeId: data.codeId, description: description,
+                    codeId: data.codeId, description: description
                 }, function (res) {
                     layer.closeAll('loading');
                     if (res.code == 200) {

@@ -28,11 +28,11 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label w-auto">搜索：</label>
                                 <div class="layui-input-inline mr0">
-                                    <input name="codeName" class="layui-input" type="text" placeholder="输入代码项名称"/>
+                                    <input name="itemText" class="layui-input" type="text" placeholder="输入代码项名称"/>
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <button class="layui-btn icon-btn" lay-filter="formSubSearchTbLtrt" lay-submit>
+                                <button class="layui-btn icon-btn" lay-filter="codeItemSearch" lay-submit>
                                     <i class="layui-icon">&#xe615;</i>搜索
                                 </button>
                                 <button class="layui-btn icon-btn" lay-filter="codeItemSubmit" lay-submit>
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                     <hr>
-                    <form id="modelcodeItemForm" lay-filter="modelcodeItemForm" class="layui-form">
+                    <form id="modelCodeItemForm" lay-filter="modelCodeItemForm" class="layui-form">
                         <div class="layui-form-item">
                             <div class="layui-inline">
                                 <label class="layui-form-label">代码项文本</label>
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                     </form>
-                    <table class="layui-table" id="tableTbTree" lay-filter="tableTbTree"></table>
+                    <table class="layui-table" id="codeItemTable" lay-filter="codeItemTable"></table>
                 </div>
             </div>
         </div>
@@ -72,14 +72,14 @@
     </div>
 </div>
 <!-- 表格操作列 -->
-<script type="text/html" id="tableBarTbTree">
+<script type="text/html" id="tableBarCodeItem">
     <!--    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">子项管理</a>-->
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <!-- js部分 -->
 <% include("../../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'dtree', 'admin','emil'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'dtree', 'admin', 'emil'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -92,12 +92,12 @@
         $('#codeId').val(codeId);
         // 渲染表格
         var insTb = table.render({
-            elem: '#tableTbTree',
+            elem: '#codeItemTable',
             url: 'codeItem/list',
             page: true,
             where: {codeId: codeId},
             cellMinWidth: 100,
-            height:'full-180',
+            height: 'full-180',
             cols: [[
                 {type: 'checkbox'},
                 {field: 'itemText', align: 'center', sort: true, edit: 'text', title: '代码项名称'},
@@ -107,12 +107,12 @@
                         return util.toDateString(d.createDate);
                     }, title: '创建时间'
                 },
-                {align: 'center', toolbar: '#tableBarTbTree', title: '操作', minWidth: 120}
+                {align: 'center', toolbar: '#tableBarCodeItem', title: '操作', minWidth: 120}
             ]]
         });
 
         // 搜索按钮点击事件
-        form.on('submit(formSubSearchTbLtrt)', function (data) {
+        form.on('submit(codeItemSearch)', function (data) {
             insTb.reload({where: data.field}, 'data');
         });
 
@@ -124,17 +124,9 @@
                 return false;
             }
             layer.load(2);
-            var dataField = emil.getJsonString('modelcodeItemForm');
+            var dataField = emil.getJsonString('modelCodeItemForm');
             $.post("codeItem/add", dataField, function (res) {
-                layer.closeAll('loading');
-                if (res.code == 200) {
-                    layer.msg(res.msg, {icon: 1});
-                    insTb.reload();
-                } else if (res.code == 1) {
-                    layer.msg(res.msg, {icon: 0});
-                } else {
-                    layer.msg(res.msg, {icon: 2});
-                }
+                emil.resultStatus(res, insTb);
             }, 'json');
             return false;
         });
@@ -150,19 +142,13 @@
                 $.post('codeItem/delete', {
                     itemId: itemId
                 }, function (res) {
-                    layer.closeAll('loading');
-                    if (res.code == 200) {
-                        layer.msg(res.msg, {icon: 1});
-                        insTb.reload();
-                    } else {
-                        layer.msg(res.msg, {icon: 2});
-                    }
+                    emil.resultStatus(res,insTb);
                 }, 'json');
             });
         }
 
         // 工具条点击事件
-        table.on('tool(tableTbTree)', function (obj) {
+        table.on('tool(codeItemTable)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
             if (layEvent === 'edit') { // 修改
@@ -178,6 +164,29 @@
                 });
             } else if (layEvent === 'del') { // 删除
                 doDel(data.itemId, data.itemText);
+            }
+        });
+
+        table.on('edit(codeItemTable)', function (obj) {
+            let value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field; //得到字段
+            let itemText = '';
+            let itemValue = '';
+            if (field === 'itemText') {
+                itemText = value;
+                $.post('codeItem/update', {
+                    itemId: data.itemId, itemText: itemText, codeId: data.codeId
+                }, function (res) {
+                    emil.resultStatus(res, insTb);
+                }, 'json');
+            } else if (field === 'itemValue') {
+                itemValue = value;
+                $.post('codeItem/update', {
+                    itemId: data.itemId, itemValue: itemValue, codeId: data.codeId
+                }, function (res) {
+                    emil.resultStatus(res, insTb);
+                }, 'json');
             }
         });
     });

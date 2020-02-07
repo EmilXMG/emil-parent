@@ -10,8 +10,8 @@ import java.sql.SQLException;
 public class DatabaseConnection {
 
 
-    public static Connection DatabaseConnection(String dbName, String serviceName, String userName, String userPwd){
-        String url = "jdbc:mysql://" + serviceName + "/" + dbName;
+    public static Connection DatabaseConnection(String dbName, String serviceName, String userName, String userPwd) {
+        String url = "jdbc:mysql://" + serviceName + "/" + dbName + "?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone = GMT";
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -28,7 +28,7 @@ public class DatabaseConnection {
     }
 
     /**
-     *数据库连接测试
+     * 数据库连接测试
      */
     public static boolean DatabaseConnectionTest(String dbName, String serviceName, String userName, String userPwd) {
         boolean status;

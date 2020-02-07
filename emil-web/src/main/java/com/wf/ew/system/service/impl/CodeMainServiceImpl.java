@@ -21,6 +21,7 @@ public class CodeMainServiceImpl extends ServiceImpl<CodeMainMapper, CodeMain> i
         return new PageResult<>(codeMains, page.getTotal());
     }
 
+
     @Override
     public List<CodeMain> getSubsystemName() {
         return baseMapper.getCodeMainName();

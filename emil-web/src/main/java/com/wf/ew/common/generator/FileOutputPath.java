@@ -115,7 +115,6 @@ public class FileOutputPath {
                 return String.format((htmlRootPath + File.separator + "%s" + ".html"), toLowerCaseFirstOne(tableInfo.getEntityName()) + "List");
             }
         });
-
         return focList;
     }
 }

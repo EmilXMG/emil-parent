@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统参数修改</title>
+    <% include("../../../../layout/css.html"){} %>
+</head>
+<body>
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<form class="layui-form model-form" lay-filter="sysParamsForm">
+    <input type="text" name="rowGuid" class="layui-input layui-hide">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">参数名：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="paramName" autocomplete="off" class="layui-input" lay-verify="required"
+                       lay-reqtext="参数名不能为空!">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">参数值：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="paramValue" autocomplete="off" class="layui-input" lay-verify="required"
+                       lay-reqtext="参数值不能为空!">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">描述：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="description" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-row layui-col-xs12">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="sysParamsEdit">修改</button>
+                <button type="reset" class="layui-btn  layui-btn-primary">取消</button>
+            </div>
+        </div>
+</form>
+<!-- js部分 -->
+<% include("../../../../layout/js.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var emil = layui.emil;
+
+        var rowGuid = emil.getUrlParams('rowGuid');
+        $('#rowGuid').val(rowGuid);
+
+        //渲染系统参数
+        $.post("getSysParamsByRowGuid", {rowGuid: rowGuid}, function (res) {
+            form.val('sysParamsForm', res);
+            form.render();
+        }, 'json');
+
+        // 修改系统参数
+        form.on("submit(sysParamsEdit)", function (data) {
+            layer.load(2);
+            $.post("sysParamsUpdate", data.field, function (res) {
+                layer.closeAll('loading');
+                if (res.code == 200) {
+                    layer.msg(res.msg, {icon: 1});
+                    setTimeout(function () {
+                        parent.location.reload();
+                    }, 500);
+                } else if (res.code == 500) {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            }, 'json');
+            return false;
+        })
+    });
+</script>
+</body>
+</html>

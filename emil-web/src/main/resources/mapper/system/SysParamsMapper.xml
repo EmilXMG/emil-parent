@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wf.ew.system.mapper.SysParamsMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+            rowGuid, operateUserName, operateDate, param_name, param_value, description, category_guid, user_id
+        </sql>
+    <!--  系统参数列表  -->
+    <select id="listFull" resultType="com.wf.ew.system.entity.SysParams">
+        select * from sys_params
+    </select>
+</mapper>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sysParams新增</title>
+    <% include("../../../../layout/css.html"){} %>
+</head>
+<body>
+<form class="layui-form model-form">
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">参数名：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="paramName" autocomplete="off" class="layui-input" lay-verify="required"
+                       lay-reqtext="参数名不能为空!">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">参数值：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="paramValue" autocomplete="off" class="layui-input" lay-verify="required"
+                       lay-reqtext="参数值不能为空!">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">描述：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="description" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-row layui-col-xs12">
+        <div class="layui-input-block">
+            <button class="layui-btn " lay-submit="" lay-filter="sysParamsAdd">添加</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../../../layout/js.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var emil = layui.emil;
+
+        form.on("submit(sysParamsAdd)", function (data) {
+            layer.load(2);
+            $.post("sysParamsAdd", data.field, function (res) {
+                layer.closeAll('loading');
+                if (res.code == 200) {
+                    layer.msg(res.msg, {icon: 1});
+                    parent.location.reload();
+                } else if (res.code == 1) {
+                    layer.msg(res.msg, {icon: 0});
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            }, 'json');
+            return false;
+        })
+    });
+</script>
+</body>
+</html>

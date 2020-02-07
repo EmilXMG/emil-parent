@@ -1,5 +1,6 @@
-layui.define(["jquery"], function (exports) {
+layui.define(["jquery", "layer"], function (exports) {
     var $ = layui.jquery;
+    var layer = layui.layer;
     let emil = {
 
         /**
@@ -75,6 +76,19 @@ layui.define(["jquery"], function (exports) {
         },
         setValue: function () {
 
+        },
+        resultStatus: function (res, dataGrid) {
+            layer.closeAll('loading');
+            if (res.code == 200) {
+                layer.msg(res.msg, {icon: 1});
+                dataGrid.reload();
+            } else if (res.code == 1) {
+                layer.msg(res.msg, {icon: 0});
+                dataGrid.reload();
+            } else {
+                layer.msg(res.msg, {icon: 2});
+                dataGrid.reload();
+            }
         }
     };
     exports('emil', emil);

@@ -5,12 +5,15 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * @author emil
+ */
 @Controller
-@RequestMapping("/system/pages/messageCenter")
+@RequestMapping("/system/messageCenter")
 public class MessageCenterController {
     @RequiresPermissions("messageCenter:view")
     @RequestMapping()
-    public String role() {
-        return "system/pages/message_center.html";
+    public String messageCenter() {
+        return "system/pages/basic/message/message_center.html";
     }
 }

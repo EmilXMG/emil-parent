@@ -11,6 +11,7 @@ import com.wf.ew.common.dtree.Status;
 import com.wf.ew.common.utils.StringUtil;
 import com.wf.ew.system.entity.CodeMain;
 import com.wf.ew.system.entity.Subsystem;
+import com.wf.ew.system.service.CodeItemService;
 import com.wf.ew.system.service.CodeMainService;
 import com.wf.ew.system.service.SubsystemService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -24,6 +25,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author emil
+ */
 @Controller
 @RequestMapping("/system/codeMain")
 public class CodeMainController {
@@ -32,10 +36,13 @@ public class CodeMainController {
 
     private final SubsystemService subsystemService;
 
+    private final CodeItemService codeItemService;
+
     @Autowired
-    public CodeMainController(CodeMainService codeMainService, SubsystemService subsystemService) {
+    public CodeMainController(CodeMainService codeMainService, SubsystemService subsystemService, CodeItemService codeItemService) {
         this.codeMainService = codeMainService;
         this.subsystemService = subsystemService;
+        this.codeItemService = codeItemService;
     }
 
     @RequiresPermissions("codeMain:view")
@@ -101,10 +108,15 @@ public class CodeMainController {
     @ResponseBody
     @RequestMapping("/delete")
     public JsonResult delete(Integer codeId) {
-        if (codeMainService.removeById(codeId)) {
-            return JsonResult.ok("删除成功");
+        int codeItemCount = codeItemService.getCodeItemCount(codeId);
+        if (codeItemCount > 0) {
+            return JsonResult.warning("该代码项有子项不可删除！");
+        } else {
+            if (codeMainService.removeById(codeId)) {
+                return JsonResult.ok("删除成功！");
+            }
+            return JsonResult.error("删除失败！");
         }
-        return JsonResult.error("删除失败");
     }
 
     /**
