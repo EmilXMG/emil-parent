@@ -47,13 +47,13 @@
                 <thead>
                 <tr>
                     <th lay-data="{checkbox:true}"></th>
-                            <th lay-data="{field:'paramName', sort: true,align:'center'}">参数名</th>
-                            <th lay-data="{field:'paramValue', sort: true,align:'center'}">参数值</th>
-                            <th lay-data="{field:'description', sort: true,align:'center'}">描述</th>
+                    <th lay-data="{field:'paramName', sort: true,align:'center'}">参数名</th>
+                    <th lay-data="{field:'paramValue', sort: true,align:'center'}">参数值</th>
+                    <th lay-data="{field:'description', sort: true,align:'center'}">描述</th>
                     <th lay-data="{fixed: 'right', align:'center', toolbar: '#sysParamsTableBar'}">操作</th>
                 </tr>
                 </thead>
-            </table
+            </table>
         </div>
     </div>
 </div>
@@ -83,13 +83,18 @@
 
         //新增系统参数
         $("#sysParamsAdd").click(function () {
-            admin.open({
+            var layIndex = admin.open({
                 type: 2,
                 title: "新增系统参数",
                 shadeClose: true,
                 anim: 1,
                 area: ['700px', '500px'],
-                content: "/system/sysParams/sysParamsAddPage"
+                content: "/system/sysParams/sysParamsAddPage",
+                end: function () {
+                    if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
+                        table.reload('sysParamsTable');  // 成功刷新表格
+                    }
+                }
             });
         });
 
@@ -120,7 +125,6 @@
         // 删除请求
         function deletePost(itemId) {
             layer.confirm('确定删除?', {icon: 3, btnAlign: 'c', title: '提示信息'}, function (index) {
-                parent.layer.msg('删除中...', {icon: 16, shade: 0.3, time: 1000});
                 $.post('sysParams/sysParamsDelete', {
                     rowGuid: JSON.stringify(itemId)
                 }, function (res) {

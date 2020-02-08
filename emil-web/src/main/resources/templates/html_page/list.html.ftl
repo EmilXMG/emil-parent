@@ -121,7 +121,6 @@
         // 删除请求
         function deletePost(itemId) {
             layer.confirm('确定删除?', {icon: 3, btnAlign: 'c', title: '提示信息'}, function (index) {
-                parent.layer.msg('删除中...', {icon: 16, shade: 0.3, time: 1000});
                 $.post('${table.entityPath}/${table.entityPath}Delete', {
                     rowGuid: JSON.stringify(itemId)
                 }, function (res) {

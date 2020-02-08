@@ -6,7 +6,7 @@
     <% include("../../../../layout/css.html"){} %>
 </head>
 <body>
-<form class="layui-form model-form">
+<form class="layui-form model-form" id="sysParamForm">
     <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">参数名：</label>
@@ -33,7 +33,7 @@
     <div class="layui-form-item layui-row layui-col-xs12">
         <div class="layui-input-block">
             <button class="layui-btn" lay-submit="" lay-filter="sysParamsAdd">添加</button>
-            <button class="layui-btn layui-btn-primary" ew-event="closePageDialog">取消</button>
+            <button class="layui-btn layui-btn-primary" ew-event="closeDialog">取消</button>
         </div>
     </div>
 </form>
@@ -55,7 +55,8 @@
                 layer.closeAll('loading');
                 if (res.code == 200) {
                     layer.msg(res.msg, {icon: 1});
-                    parent.location.reload();
+                    admin.putLayerData('formOk', true, '#sysParamForm');
+                    admin.closeThisDialog();
                 } else if (res.code == 1) {
                     layer.msg(res.msg, {icon: 0});
                 } else {
