@@ -4,10 +4,15 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-            rowGuid, operateUserName, operateDate, param_name, param_value, description, category_guid, user_id
-        </sql>
+        rowGuid, operateUserName, operateDate, param_name, param_value, description, category_guid, user_id
+    </sql>
     <!--  系统参数列表  -->
     <select id="listFull" resultType="com.wf.ew.system.entity.SysParams">
         select * from sys_params
+    </select>
+
+    <!--  根据参数名获取参数值-->
+    <select id="getParamValue" resultType="java.lang.String">
+        select param_value from sys_params where param_name = #{paramName,jdbcType=INTEGER}
     </select>
 </mapper>

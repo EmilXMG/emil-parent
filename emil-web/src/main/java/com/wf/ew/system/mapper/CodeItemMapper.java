@@ -7,7 +7,16 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * @author emil
+ */
 public interface CodeItemMapper extends BaseMapper<CodeItem> {
+    /**
+     * 获取列表
+     *
+     * @param page
+     * @return
+     */
     List<CodeItem> listFull(@Param("page") PageParam page);
 
     /**
@@ -25,4 +34,12 @@ public interface CodeItemMapper extends BaseMapper<CodeItem> {
      * @return
      */
     List<CodeItem> getCodeItemByMainId(int codeId);
+
+    /**
+     * 根据代码项名获取代码子项列表
+     *
+     * @param codeName
+     * @return
+     */
+    List<CodeItem> getCodeItem(String codeName);
 }

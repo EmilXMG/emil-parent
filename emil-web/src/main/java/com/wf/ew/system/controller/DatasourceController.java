@@ -1,13 +1,17 @@
 package com.wf.ew.system.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.wf.ew.common.JsonResult;
 import com.wf.ew.common.PageParam;
 import com.wf.ew.common.PageResult;
 import com.wf.ew.common.database.DatabaseConnection;
+import com.wf.ew.system.entity.CodeItem;
 import com.wf.ew.system.entity.Datasource;
+import com.wf.ew.system.service.CodeItemService;
 import com.wf.ew.system.service.IDatasourceService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,6 +20,7 @@ import com.wf.ew.common.BaseController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -31,8 +36,11 @@ public class DatasourceController extends BaseController {
 
     private final IDatasourceService datasourceService;
 
-    public DatasourceController(IDatasourceService datasourceService) {
+    private final CodeItemService codeItemService;
+
+    public DatasourceController(IDatasourceService datasourceService, CodeItemService codeItemService) {
         this.datasourceService = datasourceService;
+        this.codeItemService = codeItemService;
     }
 
     @RequiresPermissions("datasource:view")
@@ -56,7 +64,7 @@ public class DatasourceController extends BaseController {
 
 
     /**
-     *添加数据源
+     * 添加数据源
      */
     @RequiresPermissions("datasource:update")
     @ResponseBody
@@ -93,13 +101,13 @@ public class DatasourceController extends BaseController {
     }
 
     /**
-     *根据ID获取数据原信息
+     * 根据ID获取数据原信息
      */
     @RequiresPermissions("datasource:view")
     @ResponseBody
     @RequestMapping("/getInfoById")
     public Datasource getInfoById(Datasource datasourceParam) {
-         return datasourceService.getById(datasourceParam.getDsId());
+        return datasourceService.getById(datasourceParam.getDsId());
     }
 
     /**
@@ -119,7 +127,7 @@ public class DatasourceController extends BaseController {
     }
 
     /**
-     *更新数据源
+     * 更新数据源
      */
     @RequiresPermissions("datasource:update")
     @ResponseBody
@@ -129,5 +137,15 @@ public class DatasourceController extends BaseController {
             return JsonResult.ok("修改成功");
         }
         return JsonResult.error("修改失败");
+    }
+
+    /**
+     * 获取程序项目中文名和英文名
+     */
+    @RequiresPermissions("datasource:view")
+    @ResponseBody
+    @RequestMapping("/getDataSourceType")
+    public List<CodeItem> getDsNameAndId() {
+        return codeItemService.getCodeItem("数据源类型");
     }
 }

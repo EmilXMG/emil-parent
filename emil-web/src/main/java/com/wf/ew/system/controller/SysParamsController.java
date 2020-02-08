@@ -83,9 +83,9 @@ public class SysParamsController extends BaseController {
         List<SysParams> sysParamsList = sysParamsService.list();
         if (sysParamsList.size() > 0 && sysParamsList != null) {
             for (SysParams params : sysParamsList) {
-                if (params.getParamName().equals(sysParams.getParamName())){
+                if (params.getParamName().equals(sysParams.getParamName())) {
                     return JsonResult.warning("参数名不可重复！");
-                }else {
+                } else {
 
                 }
             }

@@ -12,10 +12,12 @@ import com.wf.ew.common.utils.StringUtil;
 import com.wf.ew.system.entity.Datasource;
 import com.wf.ew.system.entity.SysProject;
 import com.wf.ew.system.entity.TableBasicinfo;
+import com.wf.ew.system.service.CodeItemService;
 import com.wf.ew.system.service.IDatasourceService;
 import com.wf.ew.system.service.ISysProjectService;
 import com.wf.ew.system.service.ITableBasicinfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +46,9 @@ public class TableBasicinfoController extends BaseController {
     private final IDatasourceService datasourceService;
 
     private final ISysProjectService sysProjectService;
+
+    @Autowired
+    private CodeItemService codeItemService;
 
     public TableBasicinfoController(ITableBasicinfoService tableBasicinfoService, IDatasourceService datasourceService, ISysProjectService sysProjectService) {
         this.tableBasicinfoService = tableBasicinfoService;

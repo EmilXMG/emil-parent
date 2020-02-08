@@ -91,7 +91,6 @@
                 shadeClose: true,
                 shade: 0.7,
                 anim: 1,
-                maxmin: true, //开启最大化最小化按钮
                 area: ['700px', '500px'],
                 content: "<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/${table.entityPath}AddPage"
             });
@@ -112,9 +111,7 @@
             }
         });
 
-
         // 删除${table.comment!}
-
         function doDel(${table.entityPath}Id) {
             var itemId = [];
             itemId.push(${table.entityPath}Id);
@@ -138,7 +135,6 @@
                 }, 'json');
             });
         }
-
 
         // 工具条点击事件
         table.on('tool(${table.entityPath}Table)', function (obj) {

@@ -31,4 +31,15 @@ public PageResult<SysParams> listFull(PageParam page) {
 List<SysParams> sysParamss = baseMapper.listFull(page);
 return new PageResult<>(sysParamss, page.getTotal());
 }
+
+    /**
+     * 根据参数名获取参数值
+     *
+     * @param paramName
+     * @return
+     */
+    @Override
+    public String getParamValue(String paramName) {
+        return baseMapper.getParamValue(paramName);
+    }
 }

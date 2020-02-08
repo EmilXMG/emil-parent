@@ -97,7 +97,15 @@
                 }
             }, 'json');
             return false;
-        })
+        });
+
+        //渲染下拉列表
+        $.post("getDataSourceType", function (res) {
+            $.each(res, function (index, item) {
+                $('#dsSelect').append(new Option(item.itemText, item.itemValue));//往下拉菜单里添加元素
+            });
+            form.render('select');
+        }, 'json');
     });
 </script>
 </body>

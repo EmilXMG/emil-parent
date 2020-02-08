@@ -43,4 +43,15 @@ public class CodeItemServiceImpl extends ServiceImpl<CodeItemMapper, CodeItem> i
     public List<CodeItem> getCodeItemByMainId(int codeId) {
         return baseMapper.getCodeItemByMainId(codeId);
     }
+
+    /**
+     * 根据代码项名获取代码子项列表
+     *
+     * @param codeName
+     * @return
+     */
+    @Override
+    public List<CodeItem> getCodeItem(String codeName) {
+        return baseMapper.getCodeItem(codeName);
+    }
 }

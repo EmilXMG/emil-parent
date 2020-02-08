@@ -14,7 +14,6 @@
 </div>
 <form class="layui-form model-form" lay-filter="${table.entityPath}Form">
     <input type="text" name="rowGuid" class="layui-input layui-hide">
-
     <div class="layui-form-item">
         <#list table.fields as field>
             <#if !field.keyFlag><#--生成普通字段 -->

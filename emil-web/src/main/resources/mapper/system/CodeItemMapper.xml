@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wf.ew.system.mapper.CodeItemMapper">
 
-
     <select id="listFull" resultType="com.wf.ew.system.entity.CodeItem">
         SELECT *
         FROM code_items
@@ -23,6 +22,10 @@
     <!--获取当前代码项下的子项-->
     <select id="getCodeItemByMainId" resultType="com.wf.ew.system.entity.CodeItem">
         select * from code_items where code_id = #{codeId,jdbcType=INTEGER}
+    </select>
 
+    <!--根据代码项名获取代码子项列表-->
+    <select id="getCodeItem" resultType="com.wf.ew.system.entity.CodeItem">
+        select item_text,item_value from code_items where code_id in (select code_id from code_main where code_name = #{codeName,jdbcType=INTEGER})
     </select>
 </mapper>
