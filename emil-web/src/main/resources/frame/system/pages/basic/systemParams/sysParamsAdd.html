@@ -6,7 +6,7 @@
     <% include("../../../../layout/css.html"){} %>
 </head>
 <body>
-<form class="layui-form model-form" id="sysParamForm">
+<form class="layui-form model-form">
     <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">参数名：</label>
@@ -48,14 +48,15 @@
         var util = layui.util;
         var admin = layui.admin;
         var emil = layui.emil;
-
         form.on("submit(sysParamsAdd)", function (data) {
             layer.load(2);
             $.post("sysParamsAdd", data.field, function (res) {
                 layer.closeAll('loading');
                 if (res.code == 200) {
                     layer.msg(res.msg, {icon: 1});
-                    admin.putLayerData('formOk', true, '#sysParamForm');
+                    // 设置操作成功的标识
+                    admin.putLayerData('formOk', true);
+                    // 关闭当前iframe弹窗
                     admin.closeThisDialog();
                 } else if (res.code == 1) {
                     layer.msg(res.msg, {icon: 0});

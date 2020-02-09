@@ -88,7 +88,6 @@
             admin.open({
                 type: 2,
                 title: "新增${table.comment!}",
-                shadeClose: true,
                 shade: 0.7,
                 anim: 1,
                 area: ['700px', '500px'],
@@ -143,10 +142,8 @@
                 admin.open({
                     type: 2,
                     title: "修改${table.comment!}",
-                    shadeClose: true,
                     shade: 0.7,
                     anim: 1,
-                    maxmin: true, //开启最大化最小化按钮
                     area: ['700px', '500px'],
                     content: "<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/${table.entityPath}EditPage?rowGuid=" + data.rowGuid
                 });
@@ -154,10 +151,8 @@
                 admin.open({
                     type: 2,
                     title: "${table.comment!}详情",
-                    shadeClose: true,
                     shade: 0.7,
                     anim: 1,
-                    maxmin: true, //开启最大化最小化按钮
                     area: ['700px', '500px'],
                     content: "<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/${table.entityPath}DetailPage?rowGuid=" + data.rowGuid
                 });

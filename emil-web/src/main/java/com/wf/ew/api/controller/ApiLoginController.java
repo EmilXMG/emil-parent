@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * api登录相关接口
- * Created by wangfan on 2019-05-29 下午 3:43.
+ *
+ * @author wangfan
+ * @date 2019-05-29 下午 3:43
  */
 @RequestMapping("/api")
 @RestController

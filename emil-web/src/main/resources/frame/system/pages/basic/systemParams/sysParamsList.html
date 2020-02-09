@@ -86,11 +86,11 @@
             var layIndex = admin.open({
                 type: 2,
                 title: "新增系统参数",
-                shadeClose: true,
                 anim: 1,
                 area: ['700px', '500px'],
                 content: "/system/sysParams/sysParamsAddPage",
                 end: function () {
+                    console.log(admin.getLayerData(layIndex, 'formOk')+"oiio");
                     if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
                         table.reload('sysParamsTable');  // 成功刷新表格
                     }
