@@ -42,20 +42,7 @@
                     </div>
                 </div>
             </div>
-            <table class="layui-table" lay-data="{ url:'${table.entityPath}/${table.entityPath}List',height: 'full-100',
-            page:true,toolbar: true, id:'${table.entityPath}Table'}" lay-filter="${table.entityPath}Table">
-                <thead>
-                <tr>
-                    <th lay-data="{checkbox:true}"></th>
-                    <#list table.fields as field>
-                        <#if !field.keyFlag><#--生成普通字段 -->
-                            <th lay-data="{field:'${field.propertyName}', sort: true,align:'center'}">${field.comment}</th>
-                        </#if>
-                    </#list>
-                    <th lay-data="{fixed: 'right', align:'center', toolbar: '#${table.entityPath}TableBar'}">操作</th>
-                </tr>
-                </thead>
-            </table>
+            <table class="layui-table" id="${table.entityPath}Table" lay-filter="${table.entityPath}Table"></table>
         </div>
     </div>
 </div>
@@ -69,7 +56,7 @@
 <!-- js部分 -->
 <% include("../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil','tableX'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -77,10 +64,29 @@
         var util = layui.util;
         var admin = layui.admin;
         var emil = layui.emil;
+        var tableX = layui.tableX;
+
+        // 渲染表格
+        var insTb = tableX.render({
+            elem: '#${table.entityPath}Table',
+            url: '${table.entityPath}/${table.entityPath}List',
+            page: true,
+            cellMinWidth: 100,
+            height: 'full-100',
+            cols: [[
+                {type: 'checkbox'},
+                <#list table.fields as field>
+                <#if !field.keyFlag><#--生成普通字段 -->
+                {field: '${field.propertyName}', title: '${field.comment}', sort: true, align: 'center'},
+                </#if>
+                </#list>
+                {align: 'center', toolbar: '#${table.entityPath}TableBar', title: '操作'}
+            ]]
+        });
 
         // 搜索按钮点击事件
         form.on('submit(${table.entityPath}Search)', function (data) {
-            table.reload({where: data.field}, 'data');
+            insTb.reload({where: data.field}, 'data');
         });
 
         //新增${table.comment!}
@@ -111,6 +117,7 @@
         });
 
         // 删除${table.comment!}
+
         function doDel(${table.entityPath}Id) {
             var itemId = [];
             itemId.push(${table.entityPath}Id);
@@ -119,14 +126,14 @@
 
         // 删除请求
         function deletePost(itemId) {
-            layer.confirm('确定删除?', {icon: 3, btnAlign: 'c', title: '提示信息'}, function (index) {
+            layer.confirm('确定删除', {icon: 3, btnAlign: 'c', title: '提示信息'}, function (index) {
                 $.post('${table.entityPath}/${table.entityPath}Delete', {
                     rowGuid: JSON.stringify(itemId)
                 }, function (res) {
                     layer.closeAll('loading');
                     if (res.code == 200) {
                         layer.msg(res.msg, {icon: 1});
-                        table.reload('${table.entityPath}Table');
+                        insTb.reload();
                     } else {
                         layer.msg(res.msg, {icon: 2});
                     }

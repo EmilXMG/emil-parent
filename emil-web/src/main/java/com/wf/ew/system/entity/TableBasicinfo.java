@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author emil
@@ -44,6 +44,7 @@ public class TableBasicinfo implements Serializable {
     public void setTableId(Integer tableId) {
         this.tableId = tableId;
     }
+
     public String getTableGuid() {
         return tableGuid;
     }
@@ -51,6 +52,7 @@ public class TableBasicinfo implements Serializable {
     public void setTableGuid(String tableGuid) {
         this.tableGuid = tableGuid;
     }
+
     public String getTableName() {
         return tableName;
     }
@@ -58,6 +60,7 @@ public class TableBasicinfo implements Serializable {
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
+
     public String getSqlTableName() {
         return sqlTableName;
     }
@@ -65,6 +68,7 @@ public class TableBasicinfo implements Serializable {
     public void setSqlTableName(String sqlTableName) {
         this.sqlTableName = sqlTableName;
     }
+
     public Integer getOrderNum() {
         return orderNum;
     }
@@ -72,6 +76,7 @@ public class TableBasicinfo implements Serializable {
     public void setOrderNum(Integer orderNum) {
         this.orderNum = orderNum;
     }
+
     public Integer getDsId() {
         return dsId;
     }

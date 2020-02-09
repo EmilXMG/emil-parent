@@ -50,6 +50,7 @@ MainController extends BaseController implements ErrorController {
         model.addAttribute("loginUser", getLoginUser());  // 登录用户信息
         return "index.html";
     }
+
     /**
      * 登录页
      */

@@ -9,13 +9,14 @@ import java.sql.Statement;
  */
 public class DataTableOperate {
     private static Connection conn;
-    public static void createTable(String tableName,String dbName, String serviceName, String userName, String userPwd, String tableSqlName) {
+
+    public static void createTable(String tableName, String dbName, String serviceName, String userName, String userPwd, String tableSqlName) {
         String sql = "CREATE TABLE " + tableSqlName + " (" +
                 "  rowGuid varchar(50) NOT NULL COMMENT '全局唯一标识'," +
                 "  operateUserName varchar(50) DEFAULT NULL COMMENT '操作用户'," +
                 "  operateDate datetime DEFAULT NULL COMMENT '操作日期'," +
                 "  PRIMARY KEY (rowGuid)" +
-                ") COMMENT='"+tableName+"' ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+                ") COMMENT='" + tableName + "' ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
         conn = DatabaseConnection.DatabaseConnection(dbName, serviceName, userName, userPwd);
         Statement stmt = null;
         try {

@@ -1,9 +1,12 @@
 package com.wf.ew.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+
 import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
 
 /**
@@ -68,6 +71,7 @@ public class SysParams implements Serializable {
     public void setRowGuid(String rowGuid) {
         this.rowGuid = rowGuid;
     }
+
     public String getOperateUserName() {
         return operateUserName;
     }
@@ -75,6 +79,7 @@ public class SysParams implements Serializable {
     public void setOperateUserName(String operateUserName) {
         this.operateUserName = operateUserName;
     }
+
     public Date getOperateDate() {
         return operateDate;
     }
@@ -82,6 +87,7 @@ public class SysParams implements Serializable {
     public void setOperateDate(Date operateDate) {
         this.operateDate = operateDate;
     }
+
     public String getParamName() {
         return paramName;
     }
@@ -89,6 +95,7 @@ public class SysParams implements Serializable {
     public void setParamName(String paramName) {
         this.paramName = paramName;
     }
+
     public String getParamValue() {
         return paramValue;
     }
@@ -96,6 +103,7 @@ public class SysParams implements Serializable {
     public void setParamValue(String paramValue) {
         this.paramValue = paramValue;
     }
+
     public String getDescription() {
         return description;
     }
@@ -103,6 +111,7 @@ public class SysParams implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
     public String getCategoryGuid() {
         return categoryGuid;
     }
@@ -110,6 +119,7 @@ public class SysParams implements Serializable {
     public void setCategoryGuid(String categoryGuid) {
         this.categoryGuid = categoryGuid;
     }
+
     public Integer getUserId() {
         return userId;
     }
@@ -121,14 +131,14 @@ public class SysParams implements Serializable {
     @Override
     public String toString() {
         return "SysParams{" +
-        "rowGuid=" + rowGuid +
-        ", operateUserName=" + operateUserName +
-        ", operateDate=" + operateDate +
-        ", paramName=" + paramName +
-        ", paramValue=" + paramValue +
-        ", description=" + description +
-        ", categoryGuid=" + categoryGuid +
-        ", userId=" + userId +
-        "}";
+                "rowGuid=" + rowGuid +
+                ", operateUserName=" + operateUserName +
+                ", operateDate=" + operateDate +
+                ", paramName=" + paramName +
+                ", paramValue=" + paramValue +
+                ", description=" + description +
+                ", categoryGuid=" + categoryGuid +
+                ", userId=" + userId +
+                "}";
     }
 }

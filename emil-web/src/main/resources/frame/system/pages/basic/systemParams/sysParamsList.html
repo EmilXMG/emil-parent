@@ -23,7 +23,7 @@
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <div class="layui-input-inline mr0">
-                            <input name="" class="layui-input" type="text" placeholder=""/>
+                            <input name="paramName" class="layui-input" type="text" placeholder="请输入参数名"/>
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -78,7 +78,7 @@
 
         // 搜索按钮点击事件
         form.on('submit(sysParamsSearch)', function (data) {
-            table.reload({where: data.field}, 'data');
+            table.reload('sysParamsTable',{where: data.field});
         });
 
         //新增系统参数

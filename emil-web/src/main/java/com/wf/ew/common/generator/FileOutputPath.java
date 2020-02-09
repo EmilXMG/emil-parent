@@ -16,6 +16,7 @@ public class FileOutputPath {
 
     /**
      * 首字母转小写
+     *
      * @param s
      * @return
      */
@@ -88,7 +89,7 @@ public class FileOutputPath {
         focList.add(new FileOutConfig(TemplatePathConstant.addHtmlPath) {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                return String.format((htmlRootPath + File.separator + "%s" + ".html"), toLowerCaseFirstOne(tableInfo.getEntityName())+ "Add");
+                return String.format((htmlRootPath + File.separator + "%s" + ".html"), toLowerCaseFirstOne(tableInfo.getEntityName()) + "Add");
             }
         });
 

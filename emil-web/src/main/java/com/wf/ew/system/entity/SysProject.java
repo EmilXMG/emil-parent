@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author emil
@@ -38,6 +38,7 @@ public class SysProject implements Serializable {
     public void setProjectId(Integer projectId) {
         this.projectId = projectId;
     }
+
     public String getChineseName() {
         return chineseName;
     }
@@ -45,6 +46,7 @@ public class SysProject implements Serializable {
     public void setChineseName(String chineseName) {
         this.chineseName = chineseName;
     }
+
     public String getEnglishName() {
         return englishName;
     }
@@ -52,6 +54,7 @@ public class SysProject implements Serializable {
     public void setEnglishName(String englishName) {
         this.englishName = englishName;
     }
+
     public String getPath() {
         return path;
     }

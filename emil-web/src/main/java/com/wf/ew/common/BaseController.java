@@ -7,6 +7,7 @@ import org.apache.shiro.subject.Subject;
 
 /**
  * Controller基类
+ *
  * @author emil
  */
 public class BaseController {

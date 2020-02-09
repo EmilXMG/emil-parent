@@ -16,7 +16,9 @@ import java.util.List;
 
 /**
  * 权限管理
- * @author emil*/
+ *
+ * @author emil
+ */
 @Controller
 @RequestMapping("/system/authorities")
 public class AuthoritiesController extends BaseController {

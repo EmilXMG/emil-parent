@@ -43,7 +43,8 @@ public class RoleController {
     /**
      * 查询所有角色
      *
-     * @return*/
+     * @return
+     */
     @RequiresPermissions("role:view")
     @ResponseBody
     @RequestMapping("/list")

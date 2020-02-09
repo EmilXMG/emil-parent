@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 登录日志管理
  *
- * @author emil*/
+ * @author emil
+ */
 @Controller
 @RequestMapping("/system/loginRecord")
 public class LoginRecordController {

@@ -11,26 +11,26 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
-* 系统参数
-*
-* @author emil
-* @since 2020-02-08
-* @version v1.0
-*/
+ * 系统参数
+ *
+ * @author emil
+ * @version v1.0
+ * @since 2020-02-08
+ */
 @Service
-public class SysParamsServiceImpl extends ServiceImpl <SysParamsMapper, SysParams> implements ISysParamsService   {
+public class SysParamsServiceImpl extends ServiceImpl<SysParamsMapper, SysParams> implements ISysParamsService {
 
-/**
-*系统参数列表
-*
-* @param page
-* @return
-*/
-@Override
-public PageResult<SysParams> listFull(PageParam page) {
-List<SysParams> sysParamss = baseMapper.listFull(page);
-return new PageResult<>(sysParamss, page.getTotal());
-}
+    /**
+     * 系统参数列表
+     *
+     * @param page
+     * @return
+     */
+    @Override
+    public PageResult<SysParams> listFull(PageParam page) {
+        List<SysParams> sysParamss = baseMapper.listFull(page);
+        return new PageResult<>(sysParamss, page.getTotal());
+    }
 
     /**
      * 根据参数名获取参数值

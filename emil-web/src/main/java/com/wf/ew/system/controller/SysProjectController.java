@@ -47,13 +47,13 @@ public class SysProjectController extends BaseController {
     @ResponseBody
     @RequestMapping("/add")
     public JsonResult add(SysProject sysProject) {
-        if (StringUtil.isBlank(sysProject.getChineseName())){
+        if (StringUtil.isBlank(sysProject.getChineseName())) {
             return JsonResult.warning("项目中文名不能为空!");
         }
-        if (StringUtil.isBlank(sysProject.getEnglishName())){
+        if (StringUtil.isBlank(sysProject.getEnglishName())) {
             return JsonResult.warning("项目英文名不能为空！");
         }
-        if (StringUtil.isBlank(sysProject.getPath())){
+        if (StringUtil.isBlank(sysProject.getPath())) {
             return JsonResult.warning("路径不能为空！");
         }
         sysProject.setCreateDate(new Date());

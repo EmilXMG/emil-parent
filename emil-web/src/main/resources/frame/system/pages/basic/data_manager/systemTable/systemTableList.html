@@ -142,7 +142,6 @@
 
         // 搜索按钮点击事件
         form.on('submit(systemTableSearch)', function (data) {
-            console.log(data);
             insTb.reload({where: data.field}, 'data');
         });
 

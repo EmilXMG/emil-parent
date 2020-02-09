@@ -9,6 +9,11 @@
     <!--  系统参数列表  -->
     <select id="listFull" resultType="com.wf.ew.system.entity.SysParams">
         select * from sys_params
+        <where>
+            <if test="page.pageData.paramName!=null">
+                and param_name like '%${page.pageData.paramName}%'
+            </if>
+        </where>
     </select>
 
     <!--  根据参数名获取参数值-->

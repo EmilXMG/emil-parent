@@ -5,7 +5,8 @@
     <title>消息中心</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <% include("../../../../layout/css.html"){} %>
 </head>
 <body>
@@ -19,49 +20,208 @@
     <div class="layui-card">
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
-                <li class="layui-this">全部消息</li>
-                <li>通知<span class="layui-badge">6</span></li>
-                <li>私信</li>
+                <li class="layui-this">全部消息<span id="allUnread" class="layui-badge" lay-tips="未读消息数">0</span></li>
+                <li>通知<span class="layui-badge" title="未读消息数" lay-tips="未读消息数">7</span></li>
+                <li>私信<span class="layui-badge" title="未读消息数" lay-tips="未读消息数">11</span></li>
+                <li>待办<span class="layui-badge" title="未读消息数" lay-tips="未读消息数">99+</span></li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
                     <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="del">删除</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="ready">标记已读</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all" data-events="readyAll">全部已读</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm delAll_btn">删除</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm readAll">全部已读</button>
                     </div>
-                    <table id="LAY-app-message-all" lay-filter="LAY-app-message-all">1</table>
+                    <table class="layui-table" id="sysMessageTable" lay-filter="sysMessageTable"></table>
                 </div>
                 <div class="layui-tab-item">
                     <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="del">删除</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="ready">标记已读</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="readyAll">全部已读</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="del">
+                            删除
+                        </button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice"
+                                data-events="readyAll">全部已读
+                        </button>
                     </div>
-                    <table id="LAY-app-message-notice" lay-filter="LAY-app-message-notice">2</table>
+                    <table id="LAY-app-messagedirect1" lay-filter="LAY-app-message-direct">等待开发中.......</table>
                 </div>
                 <div class="layui-tab-item">
                     <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct" data-events="del">删除</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct" data-events="ready">标记已读</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct" data-events="readyAll">全部已读</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct" data-events="del">
+                            删除
+                        </button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct"
+                                data-events="readyAll">全部已读
+                        </button>
                     </div>
-                    <table id="LAY-app-message-direct" lay-filter="LAY-app-message-direct">3</table>
+                    <table id="LAY-app-messagedirect2" lay-filter="LAY-app-message-direct">等待开发中.......</table>
+                </div>
+                <div class="layui-tab-item">
+                    <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct" data-events="del">
+                            删除
+                        </button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct"
+                                data-events="readyAll">全部已读
+                        </button>
+                    </div>
+                    <table id="LAY-app-messagedirect3" lay-filter="LAY-app-message-direct">等待开发中.......</table>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- 表格操作列 -->
+<script type="text/html" id="sysMessageTableBar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+</script>
 
+<!--消息阅读状态-->
+<script type="text/html" id="readStatus">
+    {{# if(d.isRead==1){ }}
+    <span style="color: orange;cursor:pointer;" lay-event="changeReadStatus">已读</span>
+    {{# }else if(d.isRead==0){ }}
+    <span class="icon-text" style="color: green;cursor:pointer;" lay-event="changeReadStatus">未读</span>
+    {{# } }}
+</script>
 <!-- js部分 -->
 <% include("../../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'element', 'admin'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil', 'element', 'notice', 'tableX'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
-        var element = layui.element;
+        var table = layui.table;
+        var util = layui.util;
         var admin = layui.admin;
+        var emil = layui.emil;
+        var element = layui.element;
+        var notice = layui.notice;
+        var tableX = layui.tableX;
+
+        // 渲染表格
+        var insTb = tableX.render({
+            elem: '#sysMessageTable',
+            url: 'sysMessage/sysMessageList',
+            page: true,
+            height: 'full-100',
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'messageContent', title: '消息内容', sort: true, align: 'center', width: 400},
+                {field: 'fromUserName', title: '消息发送人姓名', sort: true, align: 'center'},
+                {field: 'sendDate', title: '发送日期', sort: true, align: 'center'},
+                {field: 'messageType', title: '消息类型', sort: true, align: 'center'},
+                {align: 'center', toolbar: '#readStatus', sort: true, title: '是否已读', width: 120},
+                {align: 'center', toolbar: '#sysMessageTableBar', title: '操作', width: 120}
+            ]]
+        });
+
+        messageCount();
+
+        function messageCount() {
+            $.post('sysMessage/getMessageCount', function (res) {
+                $('#allUnread').html(res.messageCount < 99 ? res.messageCount : '99+');
+            }, 'json');
+        }
+
+        //批量删除消息中心
+        $(".delAll_btn").click(function () {
+            let checkStatus = table.checkStatus('sysMessageTable'),
+                data = checkStatus.data,
+                itemId = [];
+            if (data.length > 0) {
+                for (let i in data) {
+                    itemId.push(data[i].rowGuid);
+                }
+                deletePost(itemId);
+            } else {
+                layer.msg("请选择需要删除的数据");
+            }
+        });
+
+        // 删除消息中心
+        function doDel(sysMessageId) {
+            var itemId = [];
+            itemId.push(sysMessageId);
+            deletePost(itemId);
+        }
+
+        // 删除请求
+        function deletePost(itemId) {
+            layer.confirm('确定删除', {icon: 3, btnAlign: 'c', title: '提示信息'}, function (index) {
+                $.post('sysMessage/sysMessageDelete', {
+                    rowGuid: JSON.stringify(itemId)
+                }, function (res) {
+                    layer.closeAll('loading');
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        messageCount();
+                        insTb.reload();
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }, 'json');
+            });
+        }
+
+        // 工具条点击事件
+        table.on('tool(sysMessageTable)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+            if (layEvent === 'detail') {
+                notice.success({
+                    title: '消息通知',
+                    message: '你有新的消息，请注意查收!',
+                    audio: '2',
+                    maxWidth: '300px',
+                    buttons: [['<button>查看</button>', function () {
+                        notice.msg('点击了按钮一', {icon: 5});
+                    }], ['<button>忽略</button>', function () {
+                        notice.msg('点击了按钮二', {icon: 5});
+                    }]]
+                });
+            } else if (layEvent === 'delete') { // 删除
+                doDel(data.rowGuid);
+            } else if (layEvent === 'changeReadStatus') {
+                if (data.isRead === '1') { // 更改阅读消息状态
+                    changeReadStatus('0', data.rowGuid);
+                } else {
+                    changeReadStatus('1', data.rowGuid);
+                }
+            }
+        });
+
+        //更改阅读消息状态
+        function changeReadStatus(status, rowGuid) {
+            var title = '';
+            if (status === '1') {
+                title = '确定标记为已读';
+            } else {
+                title = '确定标记为未读';
+            }
+            layer.confirm(title, {icon: 3, btnAlign: 'c', title: '提示信息'}, function (index) {
+                changeReadStatusPost(rowGuid, status);
+            });
+        }
+
+        //全部已读
+        $(".readAll").click(function () {
+            layer.confirm('确定全部已读', {icon: 3, btnAlign: 'c', title: '提示信息'}, function (index) {
+                changeReadStatusPost(null, null);
+            });
+        });
+
+        function changeReadStatusPost(rowGuid, status) {
+            $.post('sysMessage/changeReadStatus', {rowGuid: rowGuid, isRead: status}, function (res) {
+                layer.closeAll('loading');
+                if (res.code == 200) {
+                    layer.msg(res.msg, {icon: 1});
+                    messageCount();
+                    insTb.reload();
+                } else {
+                    layer.msg(res.msg, {icon: 2});
+                }
+            }, 'json');
+        }
     });
 </script>
 </body>

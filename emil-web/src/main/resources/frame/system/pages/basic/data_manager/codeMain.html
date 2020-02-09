@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <button class="layui-btn icon-btn" lay-filter="formSubSearchTbLtrt" lay-submit>
+                                <button class="layui-btn icon-btn" lay-filter="codeMainSearch" lay-submit>
                                     <i class="layui-icon">&#xe615;</i>搜索
                                 </button>
                                 <button class="layui-btn icon-btn" lay-filter="codeMainSubmit" lay-submit>
@@ -149,7 +149,7 @@
         });
 
         // 搜索按钮点击事件
-        form.on('submit(formSubSearchTbLtrt)', function (data) {
+        form.on('submit(codeMainSearch)', function (data) {
             insTb.reload({where: data.field}, 'data');
         });
 

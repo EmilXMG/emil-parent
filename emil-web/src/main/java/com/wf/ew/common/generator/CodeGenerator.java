@@ -32,7 +32,7 @@ public class CodeGenerator {
         String loginUser = generateCode.getLoginUser();
         String loginPwd = generateCode.getLoginPwd();
         String tableName = generateCode.getSqlTableName();
-        String url = "jdbc:mysql://" + serviceName + "/" + dbName+"?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone = GMT";
+        String url = "jdbc:mysql://" + serviceName + "/" + dbName + "?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone = GMT";
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
         // 全局配置
@@ -83,7 +83,7 @@ public class CodeGenerator {
             }
         };
 
-        cfg.setFileOutConfigList(FileOutputPath.fileOutputPath(projectPath,pc));
+        cfg.setFileOutConfigList(FileOutputPath.fileOutputPath(projectPath, pc));
         mpg.setCfg(cfg);
 
         // 配置模板

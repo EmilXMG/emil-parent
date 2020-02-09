@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author emil
@@ -46,6 +46,7 @@ public class Datasource implements Serializable {
     public void setDsId(Integer dsId) {
         this.dsId = dsId;
     }
+
     public String getDsType() {
         return dsType;
     }
@@ -53,6 +54,7 @@ public class Datasource implements Serializable {
     public void setDsType(String dsType) {
         this.dsType = dsType;
     }
+
     public String getDsName() {
         return dsName;
     }
@@ -60,6 +62,7 @@ public class Datasource implements Serializable {
     public void setDsName(String dsName) {
         this.dsName = dsName;
     }
+
     public String getLoginUser() {
         return loginUser;
     }
@@ -67,6 +70,7 @@ public class Datasource implements Serializable {
     public void setLoginUser(String loginUser) {
         this.loginUser = loginUser;
     }
+
     public String getLoginPwd() {
         return loginPwd;
     }
@@ -74,6 +78,7 @@ public class Datasource implements Serializable {
     public void setLoginPwd(String loginPwd) {
         this.loginPwd = loginPwd;
     }
+
     public String getServiceName() {
         return serviceName;
     }
@@ -81,6 +86,7 @@ public class Datasource implements Serializable {
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
+
     public String getDbName() {
         return dbName;
     }
@@ -88,6 +94,7 @@ public class Datasource implements Serializable {
     public void setDbName(String dbName) {
         this.dbName = dbName;
     }
+
     public String getConnectionString() {
         return connectionString;
     }
@@ -95,6 +102,7 @@ public class Datasource implements Serializable {
     public void setConnectionString(String connectionString) {
         this.connectionString = connectionString;
     }
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -106,15 +114,15 @@ public class Datasource implements Serializable {
     @Override
     public String toString() {
         return "Datasource{" +
-        "dsId=" + dsId +
-        ", dsType=" + dsType +
-        ", dsName=" + dsName +
-        ", loginUser=" + loginUser +
-        ", loginPwd=" + loginPwd +
-        ", serviceName=" + serviceName +
-        ", dbName=" + dbName +
-        ", connectionString=" + connectionString +
-        ", createDate=" + createDate +
-        "}";
+                "dsId=" + dsId +
+                ", dsType=" + dsType +
+                ", dsName=" + dsName +
+                ", loginUser=" + loginUser +
+                ", loginPwd=" + loginPwd +
+                ", serviceName=" + serviceName +
+                ", dbName=" + dbName +
+                ", connectionString=" + connectionString +
+                ", createDate=" + createDate +
+                "}";
     }
 }
