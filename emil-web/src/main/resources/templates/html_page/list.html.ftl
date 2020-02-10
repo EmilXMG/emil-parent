@@ -49,14 +49,14 @@
 <!-- 表格操作列 -->
 <script type="text/html" id="${table.entityPath}TableBar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
     <a class="layui-btn layui-btn-xs" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
 </script>
 
 <!-- js部分 -->
 <% include("../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil','tableX'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil', 'tableX'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -91,13 +91,18 @@
 
         //新增${table.comment!}
         $("#${table.entityPath}Add").click(function () {
-            admin.open({
+            var layIndex = admin.open({
                 type: 2,
                 title: "新增${table.comment!}",
                 shade: 0.7,
                 anim: 1,
                 area: ['700px', '500px'],
-                content: "<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/${table.entityPath}AddPage"
+                content: "<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/${table.entityPath}AddPage",
+                end: function () {
+                    if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
+                        insTb.reload();  // 成功刷新表格
+                    }
+                }
             });
         });
 
@@ -146,16 +151,21 @@
             var data = obj.data;
             var layEvent = obj.event;
             if (layEvent === 'edit') { // 修改
-                admin.open({
+               var layIndex = admin.open({
                     type: 2,
                     title: "修改${table.comment!}",
                     shade: 0.7,
                     anim: 1,
                     area: ['700px', '500px'],
-                    content: "<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/${table.entityPath}EditPage?rowGuid=" + data.rowGuid
+                    content: "<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/${table.entityPath}EditPage?rowGuid=" + data.rowGuid,
+                    end: function () {
+                        if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
+                            insTb.reload();  // 成功刷新表格
+                        }
+                    }
                 });
             } else if (layEvent === 'detail') {
-                admin.open({
+                var layIndex = admin.open({
                     type: 2,
                     title: "${table.comment!}详情",
                     shade: 0.7,

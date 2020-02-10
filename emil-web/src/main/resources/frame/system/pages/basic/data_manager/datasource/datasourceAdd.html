@@ -68,21 +68,21 @@
 <!-- js部分 -->
 <% include("../../../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin','emil'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var table = layui.table;
         var util = layui.util;
         var admin = layui.admin;
+        var emil = layui.emil;
         form.on("submit(datasourceAdd)", function (data) {
             console.log(data.field);
             layer.load(2);
             $.post("add", data.field, function (res) {
                 layer.closeAll('loading');
                 if (res.code == 200) {
-                    layer.msg(res.msg, {icon: 1});
-                    parent.location.reload();
+                    emil.alertAndClose(res);
                 } else if (res.code == 500) {
                     layer.msg(res.msg, {icon: 2});
                 }

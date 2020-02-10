@@ -1,6 +1,7 @@
-layui.define(["jquery", "layer"], function (exports) {
+layui.define(["jquery", "layer", 'admin'], function (exports) {
     var $ = layui.jquery;
     var layer = layui.layer;
+    var admin = layui.admin;
     let emil = {
 
         /**
@@ -89,6 +90,15 @@ layui.define(["jquery", "layer"], function (exports) {
                 layer.msg(res.msg, {icon: 2});
                 dataGrid.reload();
             }
+        },
+        alertAndClose: function (res) {
+            layer.msg(res.msg, {icon: 1});
+            // 设置操作成功的标识
+            admin.putLayerData('formOk', true);
+            setTimeout(function () {
+                // 关闭当前iframe弹窗
+                admin.closeThisDialog();
+            }, 500);
         }
     };
     exports('emil', emil);

@@ -60,10 +60,7 @@
             $.post("${table.entityPath}Update", data.field, function (res) {
                 layer.closeAll('loading');
                 if (res.code == 200) {
-                    layer.msg(res.msg, {icon: 1});
-                    setTimeout(function () {
-                        parent.location.reload();
-                    }, 500);
+                    emil.alertAndClose(res);
                 } else if (res.code == 500) {
                     layer.msg(res.msg, {icon: 2});
                 }

@@ -9,16 +9,21 @@
     <link rel="stylesheet" href="${ctxPath}/assets/module/formSelects/formSelects-v4.css"/>
     <% include("../layout/css.html"){} %>
     <style>
-
-        .tdImg {
-            width: 50px;
-            height: 50px;
-            max-width: none;
-            cursor: zoom-in;
+        #userTable + .layui-table-view .layui-table-body tbody > tr > td {
+            padding: 0;
         }
 
-        .layui-table-view {
-            margin: 0;
+        #userTable + .layui-table-view .layui-table-body tbody > tr > td > .layui-table-cell {
+            height: 48px;
+            line-height: 48px;
+        }
+
+        .tdImg {
+            width: 40px;
+            height: 40px;
+            cursor: zoom-in;
+            border-radius: 50%;
+            border: 2px solid #dddddd;
         }
     </style>
 </head>
@@ -32,7 +37,7 @@
 <!-- 正文开始 -->
 <div class="layui-fluid">
     <div class="layui-card">
-        <div class="layui-card-body table-tool-mini full-table" table-tool-mini full-table id="layPhotosTbImg">
+        <div class="layui-card-body table-tool-mini full-table" id="layPhotosTbImg">
             <!-- 表格顶部工具栏 -->
             <div class="layui-form toolbar">
                 <div class="layui-form-item">
@@ -77,14 +82,14 @@
     <form id="modelUserForm" lay-filter="modelUserForm" class="layui-form model-form">
         <input name="userId" type="hidden"/>
         <div class="layui-form-item">
-            <label class="layui-form-label">账号</label>
+            <label class="layui-form-label layui-form-required">账号</label>
             <div class="layui-input-block">
                 <input name="username" placeholder="请输入账号" type="text" class="layui-input" maxlength="20"
                        lay-verType="tips" lay-verify="required" required/>
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">用户名</label>
+            <label class="layui-form-label layui-form-required">用户名</label>
             <div class="layui-input-block">
                 <input name="nickName" placeholder="请输入用户名" type="text" class="layui-input" maxlength="20"
                        lay-verType="tips" lay-verify="required" required/>
@@ -98,7 +103,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">角色</label>
+            <label class="layui-form-label layui-form-required">角色</label>
             <div class="layui-input-block">
                 <select name="roleId" xm-select="roleId" lay-verType="tips" lay-verify="required">
                     <% for(role in roles) { %>
@@ -141,7 +146,7 @@
                     title: '头像', width: 90, align: 'center', templet: function (d) {
                         // var url = d.imgUrl;
                         let url = 'https://pic.qqtn.com/up/2018-9/15367146917869444.jpg';
-                        return '<img src="' + url + '" class="tdImg" />';
+                        return '<img src="' + url + '" class="tdImg tb-img" />';
                     }
                 },
                 {field: 'nickName', title: '用户名', align: 'center', sort: true},

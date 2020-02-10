@@ -65,7 +65,7 @@
         var admin = layui.admin;
 
         $("#datasourceAdd").click(function () {
-            admin.open({
+           var layIndex = admin.open({
                 type: 2,
                 title: "新增数据源",
                 shadeClose: true,
@@ -73,7 +73,12 @@
                 anim: 1,
                 maxmin: true, //开启最大化最小化按钮
                 area: ['700px', '500px'],
-                content: "/system/datasource/datasourceAddPage"
+                content: "/system/datasource/datasourceAddPage",
+                end: function () {
+                    if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
+                        table.reload('tableDatasource');  // 成功刷新表格
+                    }
+                }
             });
         });
 
@@ -82,7 +87,7 @@
             var data = obj.data;
             var layEvent = obj.event;
             if (layEvent === 'edit') { // 修改
-                admin.open({
+                var layIndex = admin.open({
                     type: 2,
                     title: "修改数据源",
                     shadeClose: true,
@@ -90,7 +95,12 @@
                     anim: 1,
                     maxmin: true, //开启最大化最小化按钮
                     area: ['700px', '500px'],
-                    content: "/system/datasource/datasourceEditPage?id="+ data.dsId
+                    content: "/system/datasource/datasourceEditPage?id=" + data.dsId,
+                    end: function () {
+                        if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
+                            table.reload('tableDatasource');  // 成功刷新表格
+                        }
+                    }
                 });
             } else if (layEvent === 'del') { // 删除
                 doDel(data.dsId, data.dsName);

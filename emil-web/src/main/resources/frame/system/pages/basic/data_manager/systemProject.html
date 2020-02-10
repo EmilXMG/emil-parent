@@ -32,7 +32,7 @@
             <form id="modelSytemProjectForm" lay-filter="modelSytemProjectForm" class="layui-form">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">项目中文名</label>
+                        <label class="layui-form-label w-auto layui-form-required">项目中文名</label>
                         <div class="layui-input-inline">
                             <input id="chineseName" type="text" name="chineseName" lay-verify="required"
                                    required autocomplete="off"
@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">项目英文名</label>
+                        <label class="layui-form-label w-auto layui-form-required">项目英文名</label>
                         <div class="layui-input-inline">
                             <input type="text" name="englishName" autocomplete="off"
                                    lay-verify="required|number"
@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">项目路径</label>
+                        <label class="layui-form-label w-auto layui-form-required">项目路径</label>
                         <div class="layui-input-inline">
                             <input type="text" name="path" autocomplete="off"
                                    lay-verify="required|number"
@@ -61,8 +61,6 @@
         </div>
     </div>
 </div>
-<!--    </div>-->
-<!--</div>-->
 <!-- 表格操作列 -->
 <script type="text/html" id="tableBarSystemProject">
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>

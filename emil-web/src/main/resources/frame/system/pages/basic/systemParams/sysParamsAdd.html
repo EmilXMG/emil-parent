@@ -9,14 +9,14 @@
 <form class="layui-form model-form">
     <div class="layui-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">参数名：</label>
+            <label class="layui-form-label layui-form-required">参数名：</label>
             <div class="layui-input-inline">
                 <input type="text" name="paramName" autocomplete="off" class="layui-input" lay-verify="required"
                        lay-reqtext="参数名不能为空!">
             </div>
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">参数值：</label>
+            <label class="layui-form-label layui-form-required">参数值：</label>
             <div class="layui-input-inline">
                 <input type="text" name="paramValue" autocomplete="off" class="layui-input" lay-verify="required"
                        lay-reqtext="参数值不能为空!">
@@ -53,11 +53,7 @@
             $.post("sysParamsAdd", data.field, function (res) {
                 layer.closeAll('loading');
                 if (res.code == 200) {
-                    layer.msg(res.msg, {icon: 1});
-                    // 设置操作成功的标识
-                    admin.putLayerData('formOk', true);
-                    // 关闭当前iframe弹窗
-                    admin.closeThisDialog();
+                    emil.alertAndClose(res);
                 } else if (res.code == 1) {
                     layer.msg(res.msg, {icon: 0});
                 } else {
