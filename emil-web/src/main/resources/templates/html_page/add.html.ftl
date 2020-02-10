@@ -45,8 +45,7 @@
             $.post("${table.entityPath}Add", data.field, function (res) {
                 layer.closeAll('loading');
                 if (res.code == 200) {
-                    layer.msg(res.msg, {icon: 1});
-                    parent.location.reload();
+                    emil.alertAndClose(res);
                 } else if (res.code == 500) {
                     layer.msg(res.msg, {icon: 2});
                 }
