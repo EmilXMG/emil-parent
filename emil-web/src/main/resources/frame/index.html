@@ -14,7 +14,7 @@
     <!-- 侧边栏 -->
     <% include("./layout/side.html"){} %>
     <!-- 主体部分 -->
-    <div class="layui-body"></div>
+    <div class="layui-body" ></div>
     <!-- 底部 -->
     <div class="layui-footer">
         copyright © 2019 emil all rights reserved.<span class="pull-right">v3.1.2</span>
@@ -24,9 +24,10 @@
 <!-- js部分 -->
 <% include("./layout/js.html"){} %>
 <script>
-    layui.use(['index'], function () {
+    layui.use(['index','notice'], function () {
         var $ = layui.jquery;
         var index = layui.index;
+        var notice = layui.notice;
 
         // 默认加载主页
         index.loadHome({

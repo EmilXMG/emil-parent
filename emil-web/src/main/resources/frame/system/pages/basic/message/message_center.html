@@ -115,13 +115,34 @@
             ]]
         });
 
+        // 初始化未读消息数量
         messageCount();
 
+        // 获取所有未读消息数量
         function messageCount() {
             $.post('sysMessage/getMessageCount', function (res) {
                 $('#allUnread').html(res.messageCount < 99 ? res.messageCount : '99+');
             }, 'json');
         }
+
+        // setInterval(function(){
+        //     $.post('sysMessage/getMessageCount', function (res) {
+        //         if (res.messageCount>0){
+        //     notice.success({
+        //         title: '消息通知',
+        //         message: '你有新的消息，请注意查收!',
+        //         audio: '2',
+        //         maxWidth: '300px',
+        //         position:'bottomRight',
+        //         buttons: [['<button>查看</button>', function () {
+        //             notice.msg('点击了按钮一', {icon: 5});
+        //         }], ['<button>忽略</button>', function () {
+        //             notice.msg('点击了按钮二', {icon: 5});
+        //         }]]
+        //     });
+        //     }
+        //     }, 'json');
+        // },3000);
 
         //批量删除消息中心
         $(".delAll_btn").click(function () {
@@ -162,24 +183,11 @@
                 }, 'json');
             });
         }
-
         // 工具条点击事件
         table.on('tool(sysMessageTable)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
-            if (layEvent === 'detail') {
-                notice.success({
-                    title: '消息通知',
-                    message: '你有新的消息，请注意查收!',
-                    audio: '2',
-                    maxWidth: '300px',
-                    buttons: [['<button>查看</button>', function () {
-                        notice.msg('点击了按钮一', {icon: 5});
-                    }], ['<button>忽略</button>', function () {
-                        notice.msg('点击了按钮二', {icon: 5});
-                    }]]
-                });
-            } else if (layEvent === 'delete') { // 删除
+            if (layEvent === 'delete') { // 删除
                 doDel(data.rowGuid);
             } else if (layEvent === 'changeReadStatus') {
                 if (data.isRead === '1') { // 更改阅读消息状态

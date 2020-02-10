@@ -8,12 +8,6 @@
     <% include("../layout/css.html"){} %>
 </head>
 <body>
-<!-- 页面加载loading -->
-<div class="page-loading">
-    <div class="ball-loader">
-        <span></span><span></span><span></span><span></span>
-    </div>
-</div>
 <!-- 正文开始 -->
 <div class="layui-fluid">
     <div class="layui-card">
@@ -58,7 +52,6 @@
                     <option value="${authoritie.authorityId}">${authoritie.authorityName}</option>
                     <% } %>
                 </select>
-<!--                <ul id="selTree3" class="dtree" data-id="0" data-value="湘潭市"></ul>-->
             </div>
         </div>
         <div class="layui-form-item">
@@ -71,8 +64,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">权限类型</label>
             <div class="layui-input-block">
-                <input name="isMenu" type="radio" value="0" title="菜单" checked/>
-                <input name="isMenu" type="radio" value="1" title="按钮"/>
+                <input lay-filter="isMenu" name="isMenu" type="radio" value="0" title="菜单" checked/>
+                <input lay-filter="isMenu" name="isMenu" type="radio" value="1" title="按钮"/>
             </div>
         </div>
         <div class="layui-form-item">
@@ -90,7 +83,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">菜单图标</label>
             <div class="layui-input-block">
-                <input id="iconPicker" lay-filter="iconPicker" name="icon" value=""  type="text" class="layui-input"/>
+                <input name="menuIcon" placeholder="请输入菜单图标" type="text" class="layui-input"/>
             </div>
         </div>
         <div class="layui-form-item">
@@ -110,17 +103,13 @@
 <!-- js部分 -->
 <% include("../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'admin', 'treetable','dtree','iconPicker','element','jquery'], function () {
+    layui.use(['layer', 'form', 'table', 'admin', 'treetable'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var table = layui.table;
         var admin = layui.admin;
-        var dtree = layui.dtree;
         var treetable = layui.treetable;
-        var iconPicker = layui.iconPicker;
-        var element = layui.element;
-        var $ = layui.jquery;
 
         // 渲染表格
         function renderTable() {
@@ -132,57 +121,35 @@
                 elem: '#authTable',
                 url: 'authorities/list',
                 cellMinWidth: 100,
-                height:'full-100',
                 cols: [[
                     {type: 'numbers'},
-                    {field: 'authorityName', title: '权限名称', minWidth: 200},
+                    {field: 'authorityName', title: '菜单/权限名称', minWidth: 200},
                     {field: 'menuUrl', title: '菜单url'},
                     {field: 'authority', title: '权限标识'},
-                    {field: 'orderNumber', title: '排序号', align: 'center'},
+                    {
+                        title: '菜单图标', templet: function (d) {
+                            return '<i class="' + d.menuIcon + '"></i>';
+                        }, align: 'center', width: 120
+                    },
+                    {field: 'orderNumber', title: '排序号', align: 'center', width: 100},
                     {
                         title: '类型', templet: function (d) {
-                            var strs = ['<span class="layui-badge-rim">菜单</span>', '<span class="layui-badge layui-bg-gray">按钮</span>'];
+                            var strs = ['<span class="layui-badge layui-bg-blue">菜单</span>', '<span class="layui-badge-rim">按钮</span>'];
                             return strs[d.isMenu];
-                        }, align: 'center'
+                        }, align: 'center', width: 120
                     },
-                    {templet: '#tableBar', title: '操作', align: 'center', minWidth: 120}
+                    {templet: '#tableBar', title: '操作', align: 'center', width: 140, minWidth: 140}
                 ]]
             });
         }
 
         renderTable();
 
-        iconPicker.render({
-            // 选择器，推荐使用input
-            elem: '#iconPicker',
-            // 数据类型：fontClass/unicode，推荐使用fontClass
-            type: 'fontClass',
-            // 是否开启搜索：true/false
-            search: true,
-            // 是否开启分页
-            page: true,
-            // 每页显示数量，默认12
-            limit: 12,
-            // 点击回调
-            click: function (data) {
-                console.log(data);
-            }
-        });
-
         // 添加按钮点击事件
         $('#btnAdd').click(function () {
             showEditModel();
         });
 
-        // dtree.renderSelect({
-        //     elem: "#selTree3",
-        //     // url: "../json/case/asyncTree1.json",
-        //     selectValue: "湘潭市", // 你可以在这里指定默认值
-        //     done: function(){
-        //         dtree.dataInit("selTree3", "001003");
-        //         dtree.setSelectValue("selTree3"); // 也可以在这里指定，第二个参数如果不填，则会自动读取
-        //     }
-        // });
         // 工具条点击事件
         table.on('tool(authTable)', function (obj) {
             var data = obj.data;
@@ -247,11 +214,28 @@
                         }, 'json');
                         return false;
                     });
+                    // 监听radio单选
+                    form.on('radio(isMenu)', function (data) {
+                        changeRadio(data.value);
+
+                    });
+
+                    function changeRadio(value) {
+                        if (value == 0) {
+                            $('[name="menuUrl"]').parent().parent().show();
+                            $('[name="menuIcon"]').parent().parent().show();
+                            $('[name="authority"]').parent().parent().hide();
+                        } else {
+                            $('[name="menuUrl"]').parent().parent().hide();
+                            $('[name="menuIcon"]').parent().parent().hide();
+                            $('[name="authority"]').parent().parent().show();
+                        }
+                    }
+
+                    changeRadio(mAuth ? mAuth.isMenu : 0);
                 }
             });
         }
-
-        iconPicker.checkIcon("iconFonts","{$info.icon}","layui_icon");
 
         // 搜索按钮点击事件
         $('#btnSearch').click(function () {
@@ -282,6 +266,7 @@
                 treetable.expandAll('#authTable');
             }
         });
+
         //展开树形表格
         $('#btnExpandAuth').click(function () {
             treetable.expandAll('#authTable');
