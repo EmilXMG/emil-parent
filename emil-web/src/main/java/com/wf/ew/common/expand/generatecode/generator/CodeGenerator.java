@@ -1,4 +1,4 @@
-package com.wf.ew.common.generator;
+package com.wf.ew.common.expand.generatecode.generator;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import com.wf.ew.common.pojo.GenerateCode;
+import com.wf.ew.common.expand.generatecode.pojo.GenerateCode;
 
 import java.util.Map;
 

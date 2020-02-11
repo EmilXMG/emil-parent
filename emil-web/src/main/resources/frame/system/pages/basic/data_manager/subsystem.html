@@ -66,7 +66,7 @@
 <!-- js部分 -->
 <% include("../../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'dtree', "admin","emil"], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'dtree', "admin", "emil"], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -81,7 +81,7 @@
             url: 'subsystem/list',
             page: true,
             cellMinWidth: 150,
-            height:'full-180',
+            height: 'full-180',
             cols: [[
                 {type: 'checkbox'},
                 {type: 'numbers', title: '序'},
@@ -93,7 +93,7 @@
                         return util.toDateString(d.createDate);
                     }, title: '创建时间'
                 },
-                {align: 'center', toolbar: '#tableBarSubsystem', title: '操作', minWidth: 120}
+                {align: 'center', toolbar: '#tableBarSubsystem', title: '操作', width: 80}
             ]]
         });
         // 搜索按钮点击事件

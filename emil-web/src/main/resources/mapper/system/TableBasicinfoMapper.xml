@@ -27,7 +27,7 @@
         </where>
     </select>
 
-    <select id="getDataSourceAndTable" resultType="com.wf.ew.common.pojo.GenerateCode" parameterType="java.lang.String">
+    <select id="getDataSourceAndTable" resultType="com.wf.ew.common.expand.generatecode.pojo.GenerateCode" parameterType="java.lang.String">
       select d.service_name,d.db_name,d.login_user,d.login_pwd,t.sql_table_name from table_basicinfo t,datasource d where t.ds_id = d.ds_id and t.table_id = #{tableId,jdbcType=VARCHAR}
     </select>
 </mapper>

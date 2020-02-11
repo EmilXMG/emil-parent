@@ -1,4 +1,4 @@
-package com.wf.ew.common.generator;
+package com.wf.ew.common.expand.generatecode.generator;
 
 
 import java.io.Serializable;

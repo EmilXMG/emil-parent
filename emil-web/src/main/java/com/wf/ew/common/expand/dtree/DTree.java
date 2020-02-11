@@ -1,10 +1,12 @@
-package com.wf.ew.common.dtree;
+package com.wf.ew.common.expand.dtree;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 树类
+ *
+ * @author emil
  */
 public class DTree {
     /**

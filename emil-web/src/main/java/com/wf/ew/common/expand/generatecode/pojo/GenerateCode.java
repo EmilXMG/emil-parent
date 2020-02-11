@@ -1,4 +1,4 @@
-package com.wf.ew.common.pojo;
+package com.wf.ew.common.expand.generatecode.pojo;
 
 public class GenerateCode {
 

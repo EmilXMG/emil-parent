@@ -89,7 +89,6 @@
 <script type="text/html" id="tableBarSystemTable">
     <a title="表结构" class="layui-icon layui-icon-table operateBtn" lay-event="tableStructure"></a>
     <a title="生成代码" class="layui-icon layui-icon-fonts-code operateBtn" lay-event="generate"></a>
-    <a title="修改" class="layui-icon layui-icon-edit operateBtn" lay-event="edit"></a>
     <a title="删除" class="layui-icon layui-icon-delete operateBtn" lay-event="del"></a>
 </script>
 <!-- js部分 -->
@@ -120,7 +119,17 @@
                         return util.toDateString(d.createDate);
                     }, title: '创建时间'
                 },
-                {align: 'center', toolbar: '#tableBarSystemTable', title: '操作', minWidth: 120}
+                {
+                    field: 'isGenerate', align: 'center', width: 130, title: '是否已生成代码', templet: function (d) {
+                        var data = d.isGenerate;
+                        if (data == '1') {
+                            return '<span style="color: green">已生成</span>'
+                        } else {
+                            return '<span style="color: orange">未生成</span>'
+                        }
+                    }
+                },
+                {align: 'center', toolbar: '#tableBarSystemTable', title: '操作', width: 120}
             ]]
         });
         // 树形渲染
@@ -210,6 +219,7 @@
                         }
                     }
                 });
+                layer.iframeAuto(layIndex);
             }
             //生成代码
             if (layEvent === 'generate') {

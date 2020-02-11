@@ -107,7 +107,7 @@
                         return util.toDateString(d.createDate);
                     }, title: '创建时间'
                 },
-                {align: 'center', toolbar: '#tableBarCodeItem', title: '操作', minWidth: 120}
+                {align: 'center', toolbar: '#tableBarCodeItem', title: '操作', width: 80}
             ]]
         });
 
@@ -142,7 +142,7 @@
                 $.post('codeItem/delete', {
                     itemId: itemId
                 }, function (res) {
-                    emil.resultStatus(res,insTb);
+                    emil.resultStatus(res, insTb);
                 }, 'json');
             });
         }

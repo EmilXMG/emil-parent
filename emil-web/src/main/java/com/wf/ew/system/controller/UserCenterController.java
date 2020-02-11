@@ -3,7 +3,7 @@ package com.wf.ew.system.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.wf.ew.common.BaseController;
 import com.wf.ew.common.JsonResult;
-import com.wf.ew.common.emilutils.base64.Base64Util;
+import com.wf.ew.common.expand.emilutils.base64.Base64Util;
 import com.wf.ew.common.utils.ConfigUtils;
 import com.wf.ew.system.entity.User;
 import com.wf.ew.system.service.UserService;
@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Base64;
 
 /**
  * @author emil

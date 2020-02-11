@@ -5,9 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.wf.ew.common.JsonResult;
 import com.wf.ew.common.PageParam;
 import com.wf.ew.common.PageResult;
-import com.wf.ew.common.dtree.DTree;
-import com.wf.ew.common.dtree.DTreeResponse;
-import com.wf.ew.common.dtree.Status;
+import com.wf.ew.common.expand.dtree.DTree;
+import com.wf.ew.common.expand.dtree.DTreeResponse;
+import com.wf.ew.common.expand.dtree.Status;
 import com.wf.ew.common.utils.StringUtil;
 import com.wf.ew.system.entity.CodeMain;
 import com.wf.ew.system.entity.Subsystem;
@@ -51,10 +51,15 @@ public class CodeMainController {
         return "system/pages/basic/data_manager/codeMain.html";
     }
 
+    /**
+     * 下拉树
+     *
+     * @return
+     */
     @RequiresPermissions("codeMain:view")
     @ResponseBody
     @RequestMapping("/dtree")
-    public String dtree() {
+    public String dTree() {
         List<DTree> dTrees = new ArrayList<>();
         List<DTree> children = new ArrayList<>();
         List<Subsystem> subsystems = subsystemService.getSubsystemNameAndNum();

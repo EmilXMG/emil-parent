@@ -2,11 +2,10 @@ package com.wf.ew.system.service;
 
 import com.wf.ew.common.PageParam;
 import com.wf.ew.common.PageResult;
-import com.wf.ew.common.pojo.GenerateCode;
+import com.wf.ew.common.expand.generatecode.pojo.GenerateCode;
 import com.wf.ew.system.entity.TableBasicinfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-import java.util.List;
 import java.util.Map;
 
 /**

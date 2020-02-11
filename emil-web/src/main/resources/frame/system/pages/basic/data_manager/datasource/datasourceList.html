@@ -39,7 +39,7 @@
                     <th lay-data="{field:'dbName', sort: true,align:'center'}">数据库名</th>
                     <th lay-data="{field:'loginUser',sort: true,align:'center'}">登录用户</th>
                     <th lay-data="{field:'createDate',sort: true,align:'center'}">创建日期</th>
-                    <th lay-data="{fixed: 'right', align:'center', toolbar: '#tableBarDatasource'}">操作</th>
+                    <th lay-data="{fixed: 'right', align:'center',width:180, toolbar: '#tableBarDatasource'}">操作</th>
                 </tr>
                 </thead>
             </table>
@@ -65,7 +65,7 @@
         var admin = layui.admin;
 
         $("#datasourceAdd").click(function () {
-           var layIndex = admin.open({
+            var layIndex = admin.open({
                 type: 2,
                 title: "新增数据源",
                 shadeClose: true,

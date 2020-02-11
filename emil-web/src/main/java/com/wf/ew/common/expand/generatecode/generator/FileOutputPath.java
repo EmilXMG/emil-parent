@@ -1,4 +1,4 @@
-package com.wf.ew.common.generator;
+package com.wf.ew.common.expand.generatecode.generator;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.config.FileOutConfig;

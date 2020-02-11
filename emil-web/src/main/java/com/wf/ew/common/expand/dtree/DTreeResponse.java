@@ -1,7 +1,9 @@
-package com.wf.ew.common.dtree;
+package com.wf.ew.common.expand.dtree;
 
 /**
  * response返回类
+ *
+ * @author emil
  */
 public class DTreeResponse {
     /**

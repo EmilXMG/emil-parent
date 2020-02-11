@@ -37,6 +37,8 @@ public class TableBasicinfo implements Serializable {
 
     private String subsystemNum;
 
+    private String isGenerate;
+
     public Integer getTableId() {
         return tableId;
     }
@@ -99,5 +101,13 @@ public class TableBasicinfo implements Serializable {
 
     public void setSubsystemNum(String subsystemNum) {
         this.subsystemNum = subsystemNum;
+    }
+
+    public String getIsGenerate() {
+        return isGenerate;
+    }
+
+    public void setIsGenerate(String isGenerate) {
+        this.isGenerate = isGenerate;
     }
 }

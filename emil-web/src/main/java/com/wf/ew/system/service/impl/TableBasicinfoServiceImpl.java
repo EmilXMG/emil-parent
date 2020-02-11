@@ -2,7 +2,7 @@ package com.wf.ew.system.service.impl;
 
 import com.wf.ew.common.PageParam;
 import com.wf.ew.common.PageResult;
-import com.wf.ew.common.pojo.GenerateCode;
+import com.wf.ew.common.expand.generatecode.pojo.GenerateCode;
 import com.wf.ew.system.entity.TableBasicinfo;
 import com.wf.ew.system.mapper.TableBasicinfoMapper;
 import com.wf.ew.system.service.ITableBasicinfoService;

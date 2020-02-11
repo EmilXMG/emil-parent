@@ -80,7 +80,7 @@
                 {field: '${field.propertyName}', title: '${field.comment}', sort: true, align: 'center'},
                 </#if>
                 </#list>
-                {align: 'center', toolbar: '#${table.entityPath}TableBar', title: '操作'}
+                {align: 'center', toolbar: '#${table.entityPath}TableBar', width: 170, title: '操作'}
             ]]
         });
 
@@ -151,7 +151,7 @@
             var data = obj.data;
             var layEvent = obj.event;
             if (layEvent === 'edit') { // 修改
-               var layIndex = admin.open({
+                var layIndex = admin.open({
                     type: 2,
                     title: "修改${table.comment!}",
                     shade: 0.7,

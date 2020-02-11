@@ -1,4 +1,4 @@
-package com.wf.ew.common.emilutils.base64;
+package com.wf.ew.common.expand.emilutils.base64;
 
 import org.springframework.web.multipart.MultipartFile;
 

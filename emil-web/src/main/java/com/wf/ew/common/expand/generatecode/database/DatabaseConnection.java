@@ -1,4 +1,4 @@
-package com.wf.ew.common.database;
+package com.wf.ew.common.expand.generatecode.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
