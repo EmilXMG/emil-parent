@@ -51,14 +51,7 @@
         form.on("submit(sysParamsAdd)", function (data) {
             layer.load(2);
             $.post("sysParamsAdd", data.field, function (res) {
-                layer.closeAll('loading');
-                if (res.code == 200) {
-                    emil.alertAndClose(res);
-                } else if (res.code == 1) {
-                    layer.msg(res.msg, {icon: 0});
-                } else {
-                    layer.msg(res.msg, {icon: 2});
-                }
+                emil.alertAndClose(res);
             }, 'json');
             return false;
         })

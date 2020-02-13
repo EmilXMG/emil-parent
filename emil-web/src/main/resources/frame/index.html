@@ -14,26 +14,72 @@
     <!-- 侧边栏 -->
     <% include("./layout/side.html"){} %>
     <!-- 主体部分 -->
-    <div class="layui-body" ></div>
+    <div class="layui-body"></div>
     <!-- 底部 -->
     <div class="layui-footer">
-        copyright © 2019 emil all rights reserved.<span class="pull-right">v3.1.2</span>
+        copyright © 2019 emil all rights reserved.<span class="pull-right">v1.0.0</span>
     </div>
 </div>
 
 <!-- js部分 -->
 <% include("./layout/js.html"){} %>
 <script>
-    layui.use(['index','notice'], function () {
+    layui.use(['index', 'notice','admin'], function () {
         var $ = layui.jquery;
         var index = layui.index;
         var notice = layui.notice;
-
+        var admin = layui.admin;
         // 默认加载主页
         index.loadHome({
             menuPath: 'console',
             menuName: '<i class="layui-icon layui-icon-home"></i>'
         });
+
+        // 消息提示
+        function messageNotice() {
+            notice.info({
+                title: '消息通知',
+                message: '你有新的消息，请注意查收!',
+                audio: '2',
+                className:'messageTips',
+                maxWidth: '300px',
+                position: 'bottomRight',
+                transitionIn:'bounceInLeft',
+                buttons: [['<button>查看</button>', function () {
+                    admin.popupRight({
+                        type: 2,
+                        content: 'tpl/message'
+                    });
+                    notice.hide({}, document.querySelector('.messageTips'));
+                }], ['<button>忽略</button>', function () {
+                    notice.hide({}, document.querySelector('.messageTips'));
+                }]]
+            });
+        }
+
+        // 加载的时候判断是否有未读消息
+        window.onload = windowLoad();
+
+        function windowLoad() {
+            $.post('system/sysMessage/getMessageCount', function (res) {
+                if (res.messageCount > 0) {
+                    messageNotice();
+                }
+            }, 'json');
+        };
+
+        // 定时执行消息接收
+        setInterval(function () {
+            $.post('system/sysMessage/getRecentMessage', function (res) {
+                var nowDate = new Date().getTime();
+                var getMessageDate = new Date(res.sendDate).getTime();
+                var differenceValue = nowDate - getMessageDate;
+                var seconds = parseInt(differenceValue / 1000);
+                if (seconds < 3) {
+                    messageNotice();
+                }
+            }, 'json');
+        }, 3000);
     });
 </script>
 </body>

@@ -108,7 +108,9 @@ public class User implements Serializable {
      */
     private Integer departmentId;
 
-
+    /**
+     * 描述
+     */
     private String description;
 
     /**

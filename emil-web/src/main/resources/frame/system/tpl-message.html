@@ -100,51 +100,23 @@
 <div class="layui-tab layui-tab-brief" style="padding: 5px 0;margin: 0;">
 
     <ul class="layui-tab-title" style="text-align: center;">
-        <li class="layui-this">通知(5)</li>
-        <li>私信(12)</li>
-        <li>待办(3)</li>
+        <li class="layui-this">全部(<span id="allMessageCount">0</span>)</li>
+        <li>消息(12)</li>
+        <li>系统通知(3)</li>
     </ul>
 
     <div class="layui-tab-content" style="padding: 5px 0;">
-
         <!-- tab1 -->
         <div class="layui-tab-item layui-show">
-
             <div class="message-list">
-
-                <!-- 实际项目请使用后台数据循环出来 -->
-                <a class="message-list-item" href="javascript:;">
-                    <img class="message-item-icon" src="../../assets/images/message.png">
-                    <div class="message-item-right">
-                        <h2 class="message-item-title">你收到了14份新周报</h2>
-                        <p class="message-item-text">10个月前</p>
-                    </div>
-                </a>
-                <a class="message-list-item" href="javascript:;">
-                    <img class="message-item-icon" src="../../assets/images/message.png">
-                    <div class="message-item-right">
-                        <h2 class="message-item-title">你收到了14份新周报</h2>
-                        <p class="message-item-text">10个月前</p>
-                    </div>
-                </a>
-                <a class="message-list-item" href="javascript:;">
-                    <img class="message-item-icon" src="../../assets/images/message.png">
-                    <div class="message-item-right">
-                        <h2 class="message-item-title">你收到了14份新周报</h2>
-                        <p class="message-item-text">10个月前</p>
-                    </div>
-                </a>
-
+                <div id="messageContent"></div>
                 <!-- 列表为空 -->
                 <div class="message-list-empty" style="display: none;">
                     <img src="../../assets/images/img_msg_notice.svg">
                     <div>没有通知</div>
                 </div>
-
             </div>
-
-            <a class="message-btn-clear" href="javascript:;">全部标记已读</a>
-
+            <a class="message-btn-clear read-all-btn" href="javascript:;">全部标记已读</a>
         </div>
         <!-- tab2 -->
         <div class="layui-tab-item">
@@ -185,9 +157,7 @@
                 </div>
 
             </div>
-
             <a class="message-btn-clear" href="javascript:;">清空消息</a>
-
         </div>
 
         <!-- tab3 -->
@@ -235,27 +205,68 @@
 <!-- js部分 -->
 <% include("../layout/js.html"){} %>
 <script>
-    layui.use(['element'], function () {
+    layui.use(['element', 'flow', 'util'], function () {
         var $ = layui.jquery;
         var element = layui.element;
+        var flow = layui.flow;
+        var util = layui.util;
 
-        // 加载更多按钮点击事件
-        $('#btn-more1').click(function () {
-            var $that = $(this);
-            var str = $that.prev()[0].outerHTML;
-            for (var i = 0; i < 5; i++) {
-                $that.before(str);
+        flow.load({
+            elem: '#messageContent'//指定列表容器
+            , done: function (page, next) { //到达临界点（默认滚动触发），触发下一页
+                var lis = [];
+                //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
+                $.post('../system/sysMessage/getMessageList', {'page': page}, function (res) {
+                    var returnData = JSON.parse(res);
+                    var messageCount = returnData.messageCount;
+                    $('#allMessageCount').html(messageCount);
+                    layui.each(returnData.data, function (index, item) {
+                        var sendDate = util.toDateString(item.sendDate);
+                        lis.push('<a class="message-list-item animated fadeIn" data-id="' + item.rowGuid + '">' +
+                            '        <img class="message-item-icon" src="../../assets/images/message.png">' +
+                            '        <div class="message-item-right">' +
+                            '            <h2 style="cursor: pointer" class="message-item-title check">' + item.messageTitle + '</h2>' +
+                            '            <p class="message-item-text" style="padding-top: 5px">' + sendDate + '</p>' +
+                            '        </div>' +
+                            '        <div style="padding-top: 30px">' +
+                            '            <span style="cursor: pointer" class="layui-badge layui-badge-green read">标记已读</span>' +
+                            '            <span style="cursor: pointer" class="layui-badge layui-badge-blue del">删除</span>' +
+                            '        </div>' +
+                            '    </a>');
+                    });
+                    next(lis.join(''), page < returnData.pages);
+
+                    // 标记为已读
+                    $(".read").on("click", function () {
+                        var rowGuid = $(this).parent().parent('.message-list-item').attr("data-id");
+                        console.log(rowGuid);
+                        $(this).parent().parent('.message-list-item').removeClass("fadeIn");
+                        $(this).parent().parent('.message-list-item').addClass("bounceOutRight");
+                        $(this).parent().parent('.message-list-item').css('display', 'none');
+                    });
+
+                    // 删除
+                    $(".del").on("click", function () {
+                        var rowGuid = $(this).parent().parent('.message-list-item').attr("data-id");
+                        console.log(rowGuid)
+                    });
+
+                });
             }
         });
 
-        // 清空消息点击事件
-        $('.message-btn-clear').click(function () {
-            $(this).css('display', 'none');
-            $(this).prev().find('.message-list-item').remove();
-            $(this).prev().find('.message-btn-more').remove();
-            $(this).prev().find('.message-list-empty').css('display', 'block');
-        });
-    });
+
+        // }, 'json');
+
+        //
+        // // 清空消息点击事件
+        // $('.read-all-btn').click(function () {
+        //     $(".message-list-item").each(function(){
+        //         console.log($(this).attr('data-id'));
+        //     });
+        // });
+    })
+    ;
 </script>
 </body>
 </html>

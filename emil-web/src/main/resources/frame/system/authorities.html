@@ -83,7 +83,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">菜单图标</label>
             <div class="layui-input-block">
-                <input name="menuIcon" placeholder="请输入菜单图标" type="text" class="layui-input"/>
+                <!--                <input name="menuIcon" placeholder="请输入菜单图标" type="text" class="layui-input"/>-->
+                <input type="text" name="menuIcon" id="iconPicker" lay-filter="iconPicker" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -98,12 +99,13 @@
             <button class="layui-btn" lay-filter="modelAuthSubmit" lay-submit>保存</button>
         </div>
     </form>
+
 </script>
 
 <!-- js部分 -->
 <% include("../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'admin', 'treetable','iconPicker'], function () {
+    layui.use(['layer', 'form', 'table', 'admin', 'treetable', 'iconPicker', 'xmSelect'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -111,6 +113,7 @@
         var admin = layui.admin;
         var treetable = layui.treetable;
         var iconPicker = layui.iconPicker;
+        var xmSelect = layui.xmSelect;
 
         // 渲染表格
         function renderTable() {
@@ -132,7 +135,7 @@
                             return '<i class="' + d.menuIcon + '"></i>';
                         }, align: 'center', width: 120
                     },
-                    {field: 'orderNumber', title: '排序号', align: 'center', width: 100},
+                    {field: 'orderNumber', title: '排序号',edit: 'text', align: 'center', width: 100},
                     {
                         title: '类型', templet: function (d) {
                             var strs = [
@@ -148,6 +151,75 @@
         }
 
         renderTable();
+
+        function renderIconPicker(mAuth) {
+            iconPicker.render({
+                // 选择器，推荐使用input
+                elem: '#iconPicker',
+                // 数据类型：fontClass/unicode，推荐使用fontClass
+                type: 'fontClass',
+                // 是否开启搜索：true/false
+                search: true,
+                page: true,
+                // 每页显示数量，默认12
+                limit: 12,
+                // 点击回调
+                click: function (data) {
+                    var icon_data = 'layui-icon ' + data.icon;
+                    $('#iconPicker').val(icon_data);
+                }
+            });
+            iconPicker.checkIcon('iconPicker', '');
+            if (mAuth) {
+                console.log(typeof mAuth.menuIcon);
+                if (mAuth.menuIcon) {
+                    iconPicker.checkIcon('iconPicker', mAuth.menuIcon);
+                }
+                else{
+                    iconPicker.checkIcon('iconPicker', '');
+                }
+            }
+        }
+
+        function renderXmSelect() {
+            var xmSelect = xmSelect.render({
+                el: '#demo3',
+                model: {label: {type: 'text'}},
+                radio: true,
+                clickClose: true,
+                tree: {
+                    show: true,
+                    strict: false,
+                    expandedKeys: [-1],
+                },
+                height: 'auto',
+                data() {
+                    return [
+                        {
+                            name: '销售员', value: -1, children: [
+                                {name: '张三', value: 100, selected: true, children: []},
+                                {name: '李四1', value: 2, selected: true},
+                                {name: '王五1', value: 3, disabled: true},
+                            ]
+                        },
+                        {
+                            name: '奖品', value: -2, children: [
+                                {
+                                    name: '奖品3', value: -3, children: [
+                                        {name: '苹果3', value: 14, selected: true},
+                                        {name: '香蕉3', value: 15},
+                                        {name: '葡萄3', value: 16},
+                                    ]
+                                },
+                                {name: '苹果2', value: 4, selected: true, disabled: true},
+                                {name: '香蕉2', value: 5},
+                                {name: '葡萄2', value: 6},
+                            ]
+                        },
+                    ]
+                }
+            });
+        }
 
         // 添加按钮点击事件
         $('#btnAdd').click(function () {
@@ -193,6 +265,7 @@
                 type: 1,
                 title: (mAuth ? '修改' : '添加') + '权限',
                 content: $('#modelAuth').html(),
+                area: '420px',
                 success: function (layero, dIndex) {
                     $(layero).children('.layui-layer-content').css('overflow', 'visible');
                     var url = mAuth ? 'authorities/update' : 'authorities/add';
@@ -237,6 +310,8 @@
                     }
 
                     changeRadio(mAuth ? mAuth.isMenu : 0);
+                    // renderXmSelect();
+                    renderIconPicker(mAuth);
                 }
             });
         }

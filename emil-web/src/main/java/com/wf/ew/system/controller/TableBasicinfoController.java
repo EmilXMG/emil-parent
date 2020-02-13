@@ -91,6 +91,7 @@ public class TableBasicinfoController extends BaseController {
         DataTableOperate.createTable(tableBasicinfo.getTableName(), datasource.getDbName(), datasource.getServiceName(), datasource.getLoginUser(), datasource.getLoginPwd(), tableBasicinfo.getSqlTableName());
         tableBasicinfo.setCreateDate(new Date());
         tableBasicinfo.setTableGuid(UUID.randomUUID().toString());
+        tableBasicinfo.setIsGenerate("0");
         if (tableBasicinfoService.save(tableBasicinfo)) {
             return JsonResult.ok("添加成功");
         }

@@ -9,18 +9,18 @@
 <form class="layui-form model-form">
 
     <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">测试内容：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="testContent" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">测试类型：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="testType" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">测试内容：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="testContent" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">测试类型：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="testType" autocomplete="off" class="layui-input">
+            </div>
+        </div>
     </div>
 
     <div class="layui-form-item layui-row layui-col-xs12">
@@ -33,7 +33,7 @@
 <!-- js部分 -->
 <% include("../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin','emil'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -45,12 +45,7 @@
         form.on("submit(demoAdd)", function (data) {
             layer.load(2);
             $.post("demoAdd", data.field, function (res) {
-                layer.closeAll('loading');
-                if (res.code == 200) {
-                    emil.alertAndClose(res);
-                } else if (res.code == 500) {
-                    layer.msg(res.msg, {icon: 2});
-                }
+                emil.alertAndClose(res);
             }, 'json');
             return false;
         })

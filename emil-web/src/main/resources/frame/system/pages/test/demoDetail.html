@@ -15,24 +15,24 @@
 <form class="layui-form model-form" lay-filter="demoForm">
     <input type="text" name="rowGuid" class="layui-input layui-hide">
     <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">测试内容：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="testContent" autocomplete="off" class="layui-input" readonly="true">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">测试类型：</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="testType" autocomplete="off" class="layui-input" readonly="true">
-                    </div>
-                </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">测试内容：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="testContent" autocomplete="off" class="layui-input" readonly="true">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">测试类型：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="testType" autocomplete="off" class="layui-input" readonly="true">
+            </div>
+        </div>
     </div>
 </form>
 <!-- js部分 -->
 <% include("../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin','emil'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;

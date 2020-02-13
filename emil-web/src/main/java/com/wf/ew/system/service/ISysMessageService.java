@@ -5,6 +5,8 @@ import com.wf.ew.common.PageParam;
 import com.wf.ew.common.PageResult;
 import com.wf.ew.system.entity.SysMessage;
 
+import java.util.List;
+
 /**
  * 消息中心
  *
@@ -37,4 +39,21 @@ public interface ISysMessageService extends IService<SysMessage> {
      * @return
      */
     int getMessageCount(String userId);
+
+    /**
+     * 获取最近消息
+     *
+     * @param userId
+     * @return
+     */
+    SysMessage getRecentMessage(String userId);
+
+    /**
+     * 获取消息列表
+     *
+     * @param userId
+     * @param page
+     * @return
+     */
+    List<SysMessage> getMessageList(String userId, int page, int pageSize);
 }

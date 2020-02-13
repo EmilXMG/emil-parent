@@ -43,12 +43,7 @@
         form.on("submit(${table.entityPath}Add)", function (data) {
             layer.load(2);
             $.post("${table.entityPath}Add", data.field, function (res) {
-                layer.closeAll('loading');
-                if (res.code == 200) {
-                    emil.alertAndClose(res);
-                } else if (res.code == 500) {
-                    layer.msg(res.msg, {icon: 2});
-                }
+                emil.alertAndClose(res);
             }, 'json');
             return false;
         })

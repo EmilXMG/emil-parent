@@ -55,5 +55,25 @@ public class SysMessageServiceImpl extends ServiceImpl<SysMessageMapper, SysMess
         return baseMapper.getMessageCount(userId);
     }
 
+    /**
+     * 获取最近消息
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public SysMessage getRecentMessage(String userId) {
+        return baseMapper.getRecentMessage(userId);
+    }
 
+    /**
+     * 获取消息列表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<SysMessage> getMessageList(String userId, int page, int pageSize) {
+        return baseMapper.getMessageList(userId, page, pageSize);
+    }
 }

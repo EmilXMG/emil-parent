@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author emil
- * @since 2020-02-10
+ * @since 2020-02-11
  */
 @TableName("test_demo")
 public class Demo implements Serializable {

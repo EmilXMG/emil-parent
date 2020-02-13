@@ -40,4 +40,21 @@ public interface SysMessageMapper extends BaseMapper<SysMessage> {
      * @return
      */
     int getMessageCount(String userId);
+
+    /**
+     * 获取最近消息
+     *
+     * @param userId
+     * @return
+     */
+    SysMessage getRecentMessage(String userId);
+
+    /**
+     * 获取消息列表
+     *
+     * @param userId
+     * @param page
+     * @return
+     */
+    List<SysMessage> getMessageList(@Param("userId") String userId, @Param("page") int page, @Param("pageSize") int pageSize);
 }

@@ -92,13 +92,20 @@ layui.define(["jquery", "layer", 'admin'], function (exports) {
             }
         },
         alertAndClose: function (res) {
-            layer.msg(res.msg, {icon: 1});
-            // 设置操作成功的标识
-            admin.putLayerData('formOk', true);
-            setTimeout(function () {
-                // 关闭当前iframe弹窗
-                admin.closeThisDialog();
-            }, 500);
+            layer.closeAll('loading');
+            if (res.code == 200) {
+                layer.msg(res.msg, {icon: 1});
+                // 设置操作成功的标识
+                admin.putLayerData('formOk', true);
+                setTimeout(function () {
+                    // 关闭当前iframe弹窗
+                    admin.closeThisDialog();
+                }, 500);
+            } else if (res.code == 1) {
+                layer.msg(res.msg, {icon: 0});
+            } else {
+                layer.msg(res.msg, {icon: 2});
+            }
         }
     };
     exports('emil', emil);

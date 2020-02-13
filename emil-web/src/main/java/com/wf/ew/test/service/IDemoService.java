@@ -9,7 +9,7 @@ import com.wf.ew.test.entity.Demo;
 * 测试
 
 * @author emil
-* @since 2020-02-10
+* @since 2020-02-11
 * @version v1.0
 */
 public interface IDemoService extends IService<Demo> {

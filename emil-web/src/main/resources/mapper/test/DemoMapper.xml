@@ -2,10 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wf.ew.test.mapper.DemoMapper">
 
-        <!-- 通用查询结果列 -->
-        <sql id="Base_Column_List">
-            rowGuid, operateUserName, operateDate, testContent, testType
-        </sql>
     <!--  测试列表  -->
     <select id="listFull" resultType="com.wf.ew.test.entity.Demo">
         select * from test_demo

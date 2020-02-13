@@ -17,10 +17,7 @@ import com.wf.ew.common.PageParam;
 import com.wf.ew.common.PageResult;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import org.springframework.stereotype.Controller;
 import com.wf.ew.common.BaseController;
@@ -70,8 +67,8 @@ public class SysMessageController extends BaseController {
     @RequestMapping("/sysMessageList")
     public PageResult<SysMessage> sysMessageList(HttpServletRequest request) {
         PageParam pageParam = new PageParam(request);
-        pageParam.put("targetUser",String.valueOf(getLoginUser().getUserId()));
-        pageParam.setDefaultOrder(null, new String[]{"operateDate"});
+        pageParam.put("targetUser", String.valueOf(getLoginUser().getUserId()));
+        pageParam.setDefaultOrder(new String[]{"isRead"}, new String[]{"operateDate"});
         return sysMessageService.listFull(pageParam);
     }
 
@@ -135,7 +132,7 @@ public class SysMessageController extends BaseController {
     @ResponseBody
     @RequestMapping("/changeReadStatus")
     public JsonResult changeReadStatus(SysMessage sysMessage) {
-        int updateStatus = sysMessageService.changeReadStatus(sysMessage.getRowGuid(), sysMessage.getIsRead(),String.valueOf(getLoginUser().getUserId()));
+        int updateStatus = sysMessageService.changeReadStatus(sysMessage.getRowGuid(), sysMessage.getIsRead(), String.valueOf(getLoginUser().getUserId()));
         if (updateStatus > 0) {
             return JsonResult.ok("操作成功");
         }
@@ -145,13 +142,40 @@ public class SysMessageController extends BaseController {
     /**
      * 获取未读消息数量
      */
-    @RequiresPermissions("sysMessage:view")
     @ResponseBody
     @RequestMapping("/getMessageCount")
     public String getMessageCount() {
         int messageCount = sysMessageService.getMessageCount(String.valueOf(getLoginUser().getUserId()));
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("messageCount", messageCount);
+        return jsonObject.toJSONString();
+    }
+
+    /**
+     * 获取最近消息
+     */
+    @ResponseBody
+    @RequestMapping("/getRecentMessage")
+    public SysMessage getRecentMessage() {
+        return sysMessageService.getRecentMessage(String.valueOf(getLoginUser().getUserId()));
+    }
+
+    /**
+     * 获取消息列表
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getMessageList")
+    public String getMessageList(String page) {
+        int pageSize = 7;
+        int initPage = (Integer.parseInt(page) - 1) * pageSize;
+        JSONObject jsonObject = new JSONObject();
+        int messageCount = sysMessageService.getMessageCount(String.valueOf(getLoginUser().getUserId()));
+        List<SysMessage> sysMessageList = sysMessageService.getMessageList(String.valueOf(getLoginUser().getUserId()), initPage, pageSize);
+        jsonObject.put("messageCount",messageCount);
+        jsonObject.put("data", sysMessageList);
+        jsonObject.put("pages", sysMessageList.size());
         return jsonObject.toJSONString();
     }
 }

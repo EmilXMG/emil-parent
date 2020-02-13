@@ -21,9 +21,8 @@
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
                 <li class="layui-this">全部消息<span id="allUnread" class="layui-badge" lay-tips="未读消息数">0</span></li>
-                <li>通知<span class="layui-badge" title="未读消息数" lay-tips="未读消息数">7</span></li>
-                <li>私信<span class="layui-badge" title="未读消息数" lay-tips="未读消息数">11</span></li>
-                <li>待办<span class="layui-badge" title="未读消息数" lay-tips="未读消息数">99+</span></li>
+                <li>消息<span class="layui-badge" title="未读消息数" lay-tips="未读消息数">7</span></li>
+                <li>系统通知<span class="layui-badge" title="未读消息数" lay-tips="未读消息数">11</span></li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
@@ -43,28 +42,6 @@
                         </button>
                     </div>
                     <table id="LAY-app-messagedirect1" lay-filter="LAY-app-message-direct">等待开发中.......</table>
-                </div>
-                <div class="layui-tab-item">
-                    <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct" data-events="del">
-                            删除
-                        </button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct"
-                                data-events="readyAll">全部已读
-                        </button>
-                    </div>
-                    <table id="LAY-app-messagedirect2" lay-filter="LAY-app-message-direct">等待开发中.......</table>
-                </div>
-                <div class="layui-tab-item">
-                    <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct" data-events="del">
-                            删除
-                        </button>
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct"
-                                data-events="readyAll">全部已读
-                        </button>
-                    </div>
-                    <table id="LAY-app-messagedirect3" lay-filter="LAY-app-message-direct">等待开发中.......</table>
                 </div>
             </div>
         </div>
@@ -124,26 +101,6 @@
                 $('#allUnread').html(res.messageCount < 99 ? res.messageCount : '99+');
             }, 'json');
         }
-
-        // setInterval(function(){
-        //     $.post('sysMessage/getMessageCount', function (res) {
-        //         if (res.messageCount>0){
-        //     notice.success({
-        //         title: '消息通知',
-        //         message: '你有新的消息，请注意查收!',
-        //         audio: '2',
-        //         maxWidth: '300px',
-        //         position:'bottomRight',
-        //         buttons: [['<button>查看</button>', function () {
-        //             notice.msg('点击了按钮一', {icon: 5});
-        //         }], ['<button>忽略</button>', function () {
-        //             notice.msg('点击了按钮二', {icon: 5});
-        //         }]]
-        //     });
-        //     }
-        //     }, 'json');
-        // },3000);
-
         //批量删除消息中心
         $(".delAll_btn").click(function () {
             let checkStatus = table.checkStatus('sysMessageTable'),

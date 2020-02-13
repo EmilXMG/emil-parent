@@ -15,7 +15,8 @@
     <update id="changeReadStatus">
         update sys_message
         <if test="rowGuid!=null and rowGuid!=''">
-            set isread = #{isRead,jdbcType=INTEGER} where rowGuid = #{rowGuid,jdbcType=INTEGER} and targetuser = #{userId,jdbcType=INTEGER}
+            set isread = #{isRead,jdbcType=INTEGER} where rowGuid = #{rowGuid,jdbcType=INTEGER} and targetuser =
+            #{userId,jdbcType=INTEGER}
         </if>
         <if test="rowGuid==null or rowGuid==''">
             set isread = '1' where targetuser = #{userId,jdbcType=INTEGER}
@@ -25,5 +26,15 @@
     <!--获取未读消息数量-->
     <select id="getMessageCount" resultType="java.lang.Integer">
         select count(1) from sys_message where isread = '0' and targetuser = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <!--获取最近消息-->
+    <select id="getRecentMessage" resultType="com.wf.ew.system.entity.SysMessage">
+        select * from `sys_message` where targetuser = #{userId,jdbcType=INTEGER} order by send_date desc limit 0,1
+    </select>
+
+    <!--获取消息列表-->
+    <select id="getMessageList" resultType="com.wf.ew.system.entity.SysMessage">
+        select * from sys_message where isread = '0' and targetuser = #{userId,jdbcType=INTEGER} ORDER BY isRead DESC , send_Date DESC limit #{page,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
     </select>
 </mapper>

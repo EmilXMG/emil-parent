@@ -44,7 +44,7 @@
 <!-- js部分 -->
 <% include("../../../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin','emil'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -65,12 +65,7 @@
         form.on("submit(systemTableAdd)", function (data) {
             layer.load(2);
             $.post("add", data.field, function (res) {
-                layer.closeAll('loading');
-                if (res.code == 200) {
-                    emil.alertAndClose(res);
-                } else {
-                    layer.msg(res.msg, {icon: 2});
-                }
+                emil.alertAndClose(res);
             }, 'json');
             return false;
         })

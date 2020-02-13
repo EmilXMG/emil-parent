@@ -27,6 +27,8 @@ import java.util.Map;
 
 /**
  * MainController
+ *
+ * @author emil
  */
 @Controller
 public class
@@ -46,8 +48,10 @@ MainController extends BaseController implements ErrorController {
         }
         List<Authorities> authorities = authoritiesService.listByUserId(getLoginUserId());
         List<Map<String, Object>> menuTree = getMenuTree(authorities, -1);
-        model.addAttribute("menus", menuTree);  // 左侧菜单
-        model.addAttribute("loginUser", getLoginUser());  // 登录用户信息
+        // 左侧菜单
+        model.addAttribute("menus", menuTree);
+        // 登录用户信息
+        model.addAttribute("loginUser", getLoginUser());
         return "index.html";
     }
 
@@ -72,7 +76,6 @@ MainController extends BaseController implements ErrorController {
             return JsonResult.error("账号或密码不能为空");
         }
         if (!CaptchaUtil.ver(code, request)) {
-            // CaptchaUtil.clear(request);
             return JsonResult.error("验证码不正确");
         }
         try {
@@ -193,6 +196,14 @@ MainController extends BaseController implements ErrorController {
     @RequestMapping("/tpl/theme")
     public String theme() {
         return "system/tpl-theme.html";
+    }
+
+    /**
+     * 锁屏设置
+     */
+    @RequestMapping("/tpl/lock-screen")
+    public String lockScreen() {
+        return "system/tpl-lock-screen.html";
     }
 
     /**

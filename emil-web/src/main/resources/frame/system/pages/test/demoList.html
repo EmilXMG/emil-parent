@@ -49,8 +49,8 @@
 <!-- 表格操作列 -->
 <script type="text/html" id="demoTableBar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
     <a class="layui-btn layui-btn-xs" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
 </script>
 
 <!-- js部分 -->
@@ -77,7 +77,7 @@
                 {type: 'checkbox'},
                 {field: 'testContent', title: '测试内容', sort: true, align: 'center'},
                 {field: 'testType', title: '测试类型', sort: true, align: 'center'},
-                {align: 'center', toolbar: '#demoTableBar', title: '操作'}
+                {align: 'center', toolbar: '#demoTableBar', width: 170, title: '操作'}
             ]]
         });
 
@@ -148,7 +148,7 @@
             var data = obj.data;
             var layEvent = obj.event;
             if (layEvent === 'edit') { // 修改
-               var layIndex = admin.open({
+                var layIndex = admin.open({
                     type: 2,
                     title: "修改测试",
                     shade: 0.7,

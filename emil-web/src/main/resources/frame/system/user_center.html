@@ -289,7 +289,12 @@
             $('#username').text(userInfo.username);
             $('#userId').text(userInfo.userId);
             $('#address').text(userInfo.address);
-            $('#tagsInput').importTags(userInfo.tags);
+            console.log(userInfo.tags)
+            if (userInfo.tags){
+                $('#tagsInput').importTags(userInfo.tags);
+            }else {
+                $('#tagsInput').importTags('');
+            }
             form.val('userInfoForm', res.data);
             form.render();
         }, 'json');
