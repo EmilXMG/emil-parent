@@ -25,4 +25,9 @@
           select authority_id from sys_role_authorities where role_id = #{roleId}
         )
     </select>
+
+    <!--获取权限树-->
+    <select id="getAuthorities" resultType="com.wf.ew.system.entity.Authorities">
+        select * from sys_authorities order by order_number
+    </select>
 </mapper>

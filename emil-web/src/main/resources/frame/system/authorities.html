@@ -46,12 +46,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">上级菜单</label>
             <div class="layui-input-block">
-                <select name="parentId">
-                    <option value="">请选择上级菜单</option>
-                    <% for(authoritie in authorities) { %>
-                    <option value="${authoritie.authorityId}">${authoritie.authorityName}</option>
-                    <% } %>
-                </select>
+                <ul id="authoritiesTree" class="dtree" data-id="0"></ul>
+                <input type="text" id="parentId" name="parentId" class="layui-input layui-hide">
             </div>
         </div>
         <div class="layui-form-item">
@@ -83,7 +79,6 @@
         <div class="layui-form-item">
             <label class="layui-form-label">菜单图标</label>
             <div class="layui-input-block">
-                <!--                <input name="menuIcon" placeholder="请输入菜单图标" type="text" class="layui-input"/>-->
                 <input type="text" name="menuIcon" id="iconPicker" lay-filter="iconPicker" class="layui-input">
             </div>
         </div>
@@ -105,7 +100,7 @@
 <!-- js部分 -->
 <% include("../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'admin', 'treetable', 'iconPicker', 'xmSelect'], function () {
+    layui.use(['layer', 'form', 'table', 'admin', 'treetable', 'iconPicker', 'dtree'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -114,6 +109,7 @@
         var treetable = layui.treetable;
         var iconPicker = layui.iconPicker;
         var xmSelect = layui.xmSelect;
+        var dtree = layui.dtree;
 
         // 渲染表格
         function renderTable() {
@@ -135,7 +131,7 @@
                             return '<i class="' + d.menuIcon + '"></i>';
                         }, align: 'center', width: 120
                     },
-                    {field: 'orderNumber', title: '排序号',edit: 'text', align: 'center', width: 100},
+                    {field: 'orderNumber', title: '排序号', align: 'center', width: 100},
                     {
                         title: '类型', templet: function (d) {
                             var strs = [
@@ -152,6 +148,7 @@
 
         renderTable();
 
+        //渲染下拉图标
         function renderIconPicker(mAuth) {
             iconPicker.render({
                 // 选择器，推荐使用input
@@ -171,55 +168,41 @@
             });
             iconPicker.checkIcon('iconPicker', '');
             if (mAuth) {
-                console.log(typeof mAuth.menuIcon);
                 if (mAuth.menuIcon) {
                     iconPicker.checkIcon('iconPicker', mAuth.menuIcon);
-                }
-                else{
+                } else {
                     iconPicker.checkIcon('iconPicker', '');
                 }
             }
         }
 
-        function renderXmSelect() {
-            var xmSelect = xmSelect.render({
-                el: '#demo3',
-                model: {label: {type: 'text'}},
-                radio: true,
-                clickClose: true,
-                tree: {
-                    show: true,
-                    strict: false,
-                    expandedKeys: [-1],
-                },
-                height: 'auto',
-                data() {
-                    return [
-                        {
-                            name: '销售员', value: -1, children: [
-                                {name: '张三', value: 100, selected: true, children: []},
-                                {name: '李四1', value: 2, selected: true},
-                                {name: '王五1', value: 3, disabled: true},
-                            ]
-                        },
-                        {
-                            name: '奖品', value: -2, children: [
-                                {
-                                    name: '奖品3', value: -3, children: [
-                                        {name: '苹果3', value: 14, selected: true},
-                                        {name: '香蕉3', value: 15},
-                                        {name: '葡萄3', value: 16},
-                                    ]
-                                },
-                                {name: '苹果2', value: 4, selected: true, disabled: true},
-                                {name: '香蕉2', value: 5},
-                                {name: '葡萄2', value: 6},
-                            ]
-                        },
-                    ]
+        // 渲染下拉树
+        function renderDtree(mAuth) {
+            var nodeId;
+            if (mAuth) {
+                nodeId = mAuth.parentId.toString();
+            } else {
+                nodeId = '';
+            }
+            $('#parentId').val(nodeId);
+            dtree.renderSelect({
+                elem: "#authoritiesTree",
+                url: "authorities/authoritiesTree",
+                accordion: true,
+                menubar: true,
+                selectTips: "请选择上级菜单",
+                selectInitVal: nodeId,
+                selectCardHeight: "250",
+                done: function (res, $ul, first) {
+                    if (first) {
+                    }
                 }
             });
         }
+
+        dtree.on("node('authoritiesTree')", function (obj) {
+            $('#parentId').val(obj.param.nodeId);
+        });
 
         // 添加按钮点击事件
         $('#btnAdd').click(function () {
@@ -310,7 +293,7 @@
                     }
 
                     changeRadio(mAuth ? mAuth.isMenu : 0);
-                    // renderXmSelect();
+                    renderDtree(mAuth);
                     renderIconPicker(mAuth);
                 }
             });

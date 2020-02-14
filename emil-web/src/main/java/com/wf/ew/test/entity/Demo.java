@@ -2,9 +2,12 @@ package com.wf.ew.test.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
+
 import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
 
 /**
@@ -57,6 +60,7 @@ public class Demo implements Serializable {
     public void setRowGuid(String rowGuid) {
         this.rowGuid = rowGuid;
     }
+
     public String getOperateUserName() {
         return operateUserName;
     }
@@ -64,6 +68,7 @@ public class Demo implements Serializable {
     public void setOperateUserName(String operateUserName) {
         this.operateUserName = operateUserName;
     }
+
     public Date getOperateDate() {
         return operateDate;
     }
@@ -71,6 +76,7 @@ public class Demo implements Serializable {
     public void setOperateDate(Date operateDate) {
         this.operateDate = operateDate;
     }
+
     public String getTestContent() {
         return testContent;
     }
@@ -78,6 +84,7 @@ public class Demo implements Serializable {
     public void setTestContent(String testContent) {
         this.testContent = testContent;
     }
+
     public String getTestType() {
         return testType;
     }
@@ -89,11 +96,11 @@ public class Demo implements Serializable {
     @Override
     public String toString() {
         return "Demo{" +
-        "rowGuid=" + rowGuid +
-        ", operateUserName=" + operateUserName +
-        ", operateDate=" + operateDate +
-        ", testContent=" + testContent +
-        ", testType=" + testType +
-        "}";
+                "rowGuid=" + rowGuid +
+                ", operateUserName=" + operateUserName +
+                ", operateDate=" + operateDate +
+                ", testContent=" + testContent +
+                ", testType=" + testType +
+                "}";
     }
 }

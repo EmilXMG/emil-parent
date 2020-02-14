@@ -173,7 +173,7 @@ public class SysMessageController extends BaseController {
         JSONObject jsonObject = new JSONObject();
         int messageCount = sysMessageService.getMessageCount(String.valueOf(getLoginUser().getUserId()));
         List<SysMessage> sysMessageList = sysMessageService.getMessageList(String.valueOf(getLoginUser().getUserId()), initPage, pageSize);
-        jsonObject.put("messageCount",messageCount);
+        jsonObject.put("messageCount", messageCount);
         jsonObject.put("data", sysMessageList);
         jsonObject.put("pages", sysMessageList.size());
         return jsonObject.toJSONString();

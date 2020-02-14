@@ -33,6 +33,16 @@ public class AuthoritiesServiceImpl extends ServiceImpl<AuthoritiesMapper, Autho
         return baseMapper.listByRoleId(roleId);
     }
 
+    /**
+     * 获取权限树
+     *
+     * @return
+     */
+    @Override
+    public List<Authorities> getAuthorities() {
+        return baseMapper.getAuthorities();
+    }
+
 
     @Override
     public List<Authorities> listByRoleIds(List<Integer> roleIds) {

@@ -2,6 +2,7 @@ package com.wf.ew.common.expand.dtree;
 
 /**
  * 信息状态类
+ *
  * @author emil
  */
 public class Status {

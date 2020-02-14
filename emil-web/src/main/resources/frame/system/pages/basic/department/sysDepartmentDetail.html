@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>部门详情</title>
+    <% include("../../../../layout/css.html"){} %>
+</head>
+<body>
+<!-- 加载动画 -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<form class="layui-form model-form" lay-filter="sysDepartmentForm">
+    <input type="text" name="rowGuid" class="layui-input layui-hide">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">操作用户：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="operateUserName" autocomplete="off" class="layui-input" readonly="true">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">操作日期：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="operateDate" autocomplete="off" class="layui-input" readonly="true">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">部门名称：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="departmentName" autocomplete="off" class="layui-input" readonly="true">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">父id,-1表示无父级：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="parentId" autocomplete="off" class="layui-input" readonly="true">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">部门CODE：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="departmentCode" autocomplete="off" class="layui-input" readonly="true">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">排序：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="orderNumber" autocomplete="off" class="layui-input" readonly="true">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">创建日期：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="createDate" autocomplete="off" class="layui-input" readonly="true">
+            </div>
+        </div>
+    </div>
+</form>
+<!-- js部分 -->
+<% include("../../../../layout/js.html"){} %>
+<script>
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var emil = layui.emil;
+
+        var rowGuid = emil.getUrlParams('rowGuid');
+        $('#rowGuid').val(rowGuid);
+
+        //渲染部门
+        $.post("getSysDepartmentByRowGuid", {rowGuid: rowGuid}, function (res) {
+            form.val('sysDepartmentForm', res);
+            form.render();
+        }, 'json');
+    });
+</script>
+</body>
+</html>

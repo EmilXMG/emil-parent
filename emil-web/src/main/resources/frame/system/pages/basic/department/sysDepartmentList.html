@@ -4,27 +4,26 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>系统参数新增</title>
+    <title>部门新增</title>
     <% include("../../../../layout/css.html"){} %>
-    <style>
-        #treeTbTree {
-            height: 530px;
-            overflow: auto;
-        }
-
-        @media screen and (max-width: 768px) {
-            #treeTbTree {
-                height: auto;
-            }
-        }
-
-        /** dtree选中颜色重写 */
-        .dtree-theme-item-this {
-            background-color: #eeeeee !important;
-        }
-
-    </style>
 </head>
+<style>
+    #treeTbTree {
+        height: 530px;
+        overflow: auto;
+    }
+
+    @media screen and (max-width: 768px) {
+        #treeTbTree {
+            height: auto;
+        }
+    }
+
+    /** dtree选中颜色重写 */
+    .dtree-theme-item-this {
+        background-color: #eeeeee !important;
+    }
+</style>
 <body>
 
 <!-- 加载动画 -->
@@ -45,21 +44,21 @@
         <!-- 右表 -->
         <div class="layui-col-sm12 layui-col-md8 layui-col-lg9">
             <div class="layui-card">
-                <div class="layui-card-body table-tool-mini full-table">
+                <div class="layui-card-body">
                     <div class="layui-form toolbar">
                         <div class="layui-form-item">
                             <div class="layui-inline">
                                 <div class="layui-input-inline mr0">
-                                    <input name="paramName" class="layui-input" type="text" placeholder="请输入参数名"/>
+                                    <input name="" class="layui-input" type="text" placeholder="请输入部门名称"/>
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <button class="layui-btn icon-btn" lay-filter="sysParamsSearch" lay-submit>
+                                <button class="layui-btn icon-btn" lay-filter="sysDepartmentSearch" lay-submit>
                                     <i class="layui-icon">&#xe615;</i>搜索
                                 </button>
                             </div>
                             <div class="layui-inline">
-                                <button id="sysParamsAdd" class="layui-btn icon-btn" lay-submit>
+                                <button id="sysDepartmentAdd" class="layui-btn icon-btn" lay-submit>
                                     <i class="layui-icon">&#xe654;</i>新增
                                 </button>
                             </div>
@@ -69,34 +68,23 @@
                             </div>
                         </div>
                     </div>
-                    <table class="layui-table" lay-data="{ url:'sysParams/sysParamsList',height: 'full-100',
-            page:true,toolbar: true, id:'sysParamsTable'}" lay-filter="sysParamsTable">
-                        <thead>
-                        <tr>
-                            <th lay-data="{checkbox:true}"></th>
-                            <th lay-data="{field:'paramName', sort: true,align:'center'}">参数名</th>
-                            <th lay-data="{field:'paramValue', sort: true,align:'center'}">参数值</th>
-                            <th lay-data="{field:'description', sort: true,align:'center'}">描述</th>
-                            <th lay-data="{fixed: 'right', align:'center', width:170, toolbar: '#sysParamsTableBar'}">操作</th>
-                        </tr>
-                        </thead>
-                    </table>
+                    <table class="layui-table" id="sysDepartmentTable" lay-filter="sysDepartmentTable"></table>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!-- 表格操作列 -->
-<script type="text/html" id="sysParamsTableBar">
+<script type="text/html" id="sysDepartmentTableBar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
     <a class="layui-btn layui-btn-xs" lay-event="detail">详情</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
 </script>
 
 <!-- js部分 -->
 <% include("../../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil', 'dtree'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil', 'tableX', 'dtree'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -104,11 +92,23 @@
         var util = layui.util;
         var admin = layui.admin;
         var emil = layui.emil;
+        var tableX = layui.tableX;
         var dtree = layui.dtree;
 
-        // 搜索按钮点击事件
-        form.on('submit(sysParamsSearch)', function (data) {
-            table.reload('sysParamsTable', {where: data.field});
+        // 渲染表格
+        var insTb = tableX.render({
+            elem: '#sysDepartmentTable',
+            url: 'sysDepartment/sysDepartmentList',
+            page: true,
+            cellMinWidth: 100,
+            height: 'full-100',
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'departmentName', title: '部门名称', sort: true, align: 'center'},
+                {field: 'createDate', title: '创建日期', sort: true, align: 'center'},
+                {field: 'orderNumber', title: '排序', sort: true, align: 'center'},
+                {align: 'center', toolbar: '#sysDepartmentTableBar', width: 170, title: '操作'}
+            ]]
         });
 
         // 树形渲染
@@ -119,7 +119,6 @@
             initLevel: '2',
             dot: false,
             method: 'GET',
-            toolbar: true,
             toolbarFun: {
                 addTreeNode: function (treeNode, $div) {
                     console.log(treeNode);
@@ -134,32 +133,31 @@
             }
         });
 
-        // // 树形点击事件
-        // dtree.on('node("treeTbTree")', function (obj) {
-        //     var data = obj.param;
-        //     $('#subsystem_num').val(data.nodeId);
-        //     insTb.reload({where: {subsystemNum: data.nodeId}}, 'data');
-        // });
+        // 搜索按钮点击事件
+        form.on('submit(sysDepartmentSearch)', function (data) {
+            insTb.reload({where: data.field}, 'data');
+        });
 
-        //新增系统参数
-        $("#sysParamsAdd").click(function () {
+        //新增部门
+        $("#sysDepartmentAdd").click(function () {
             var layIndex = admin.open({
                 type: 2,
-                title: "新增系统参数",
+                title: "新增部门",
+                shade: 0.7,
                 anim: 1,
                 area: ['700px', '500px'],
-                content: "/system/sysParams/sysParamsAddPage",
+                content: "/system/sysDepartment/sysDepartmentAddPage",
                 end: function () {
                     if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
-                        table.reload('sysParamsTable');  // 成功刷新表格
+                        insTb.reload();  // 成功刷新表格
                     }
                 }
             });
         });
 
-        //批量删除系统参数
+        //批量删除部门
         $(".delAll_btn").click(function () {
-            let checkStatus = table.checkStatus('sysParamsTable'),
+            let checkStatus = table.checkStatus('sysDepartmentTable'),
                 data = checkStatus.data,
                 itemId = [];
             if (data.length > 0) {
@@ -172,25 +170,24 @@
             }
         });
 
+        // 删除部门
 
-        // 删除系统参数
-
-        function doDel(sysParamsId) {
+        function doDel(sysDepartmentId) {
             var itemId = [];
-            itemId.push(sysParamsId);
+            itemId.push(sysDepartmentId);
             deletePost(itemId);
         }
 
         // 删除请求
         function deletePost(itemId) {
-            layer.confirm('确定删除?', {icon: 3, btnAlign: 'c', title: '提示信息'}, function (index) {
-                $.post('sysParams/sysParamsDelete', {
+            layer.confirm('确定删除', {icon: 3, btnAlign: 'c', title: '提示信息'}, function (index) {
+                $.post('sysDepartment/sysDepartmentDelete', {
                     rowGuid: JSON.stringify(itemId)
                 }, function (res) {
                     layer.closeAll('loading');
                     if (res.code == 200) {
                         layer.msg(res.msg, {icon: 1});
-                        table.reload('sysParamsTable');
+                        insTb.reload();
                     } else {
                         layer.msg(res.msg, {icon: 2});
                     }
@@ -198,37 +195,32 @@
             });
         }
 
-
         // 工具条点击事件
-        table.on('tool(sysParamsTable)', function (obj) {
+        table.on('tool(sysDepartmentTable)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
             if (layEvent === 'edit') { // 修改
-                admin.open({
+                var layIndex = admin.open({
                     type: 2,
-                    title: "修改系统参数",
-                    shadeClose: true,
+                    title: "修改部门",
                     shade: 0.7,
                     anim: 1,
-                    maxmin: true, //开启最大化最小化按钮
                     area: ['700px', '500px'],
-                    content: "/system/sysParams/sysParamsEditPage?rowGuid=" + data.rowGuid,
+                    content: "/system/sysDepartment/sysDepartmentEditPage?rowGuid=" + data.rowGuid,
                     end: function () {
                         if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
-                            table.reload('sysParamsTable');  // 成功刷新表格
+                            insTb.reload();  // 成功刷新表格
                         }
                     }
                 });
             } else if (layEvent === 'detail') {
                 var layIndex = admin.open({
                     type: 2,
-                    title: "系统参数详情",
-                    shadeClose: true,
+                    title: "部门详情",
                     shade: 0.7,
                     anim: 1,
-                    maxmin: true, //开启最大化最小化按钮
                     area: ['700px', '500px'],
-                    content: "/system/sysParams/sysParamsDetailPage?rowGuid=" + data.rowGuid
+                    content: "/system/sysDepartment/sysDepartmentDetailPage?rowGuid=" + data.rowGuid
                 });
             } else if (layEvent === 'delete') { // 删除
                 doDel(data.rowGuid);

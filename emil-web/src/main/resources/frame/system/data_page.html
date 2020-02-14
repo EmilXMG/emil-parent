@@ -333,12 +333,13 @@
 <script src="../../assets/libs/echarts/echarts.min.js"></script>
 <script src="../../assets/libs/echarts/echartsTheme.js"></script>
 <script>
-    layui.use(['layer', 'table', 'admin', 'element'], function () {
+    layui.use(['layer', 'table', 'admin', 'element','util'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var table = layui.table;
         var admin = layui.admin;
         var element = layui.element;
+        var util = layui.util;
 
         // 渲染日签到图表
         var myCharts1 = echarts.init(document.getElementById('tjDivDay'), myEchartsTheme);
@@ -715,6 +716,13 @@
                 myCharts4.resize();
             } else {
                 myCharts5.resize();
+            }
+        });
+
+
+        util.fixbar({
+            click: function(type){
+
             }
         });
 

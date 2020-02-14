@@ -8,19 +8,19 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
-* 测试
-
-* @author emil
-* @since 2020-02-11
-* @version v1.0
-*/
+ * 测试
+ *
+ * @author emil
+ * @version v1.0
+ * @since 2020-02-11
+ */
 public interface DemoMapper extends BaseMapper<Demo> {
 
-/**
-*测试列表
-*
-* @param page
-* @return
-*/
-List<Demo> listFull(@Param("page") PageParam page);
+    /**
+     * 测试列表
+     *
+     * @param page
+     * @return
+     */
+    List<Demo> listFull(@Param("page") PageParam page);
 }

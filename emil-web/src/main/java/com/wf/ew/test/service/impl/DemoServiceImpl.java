@@ -11,24 +11,24 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
-* 测试
-*
-* @author emil
-* @since 2020-02-11
-* @version v1.0
-*/
+ * 测试
+ *
+ * @author emil
+ * @version v1.0
+ * @since 2020-02-11
+ */
 @Service
-public class DemoServiceImpl extends ServiceImpl <DemoMapper, Demo> implements IDemoService   {
+public class DemoServiceImpl extends ServiceImpl<DemoMapper, Demo> implements IDemoService {
 
-/**
-*测试列表
-*
-* @param page
-* @return
-*/
-@Override
-public PageResult<Demo> listFull(PageParam page) {
-List<Demo> demos = baseMapper.listFull(page);
-return new PageResult<>(demos, page.getTotal());
-}
+    /**
+     * 测试列表
+     *
+     * @param page
+     * @return
+     */
+    @Override
+    public PageResult<Demo> listFull(PageParam page) {
+        List<Demo> demos = baseMapper.listFull(page);
+        return new PageResult<>(demos, page.getTotal());
+    }
 }

@@ -21,4 +21,11 @@ public interface AuthoritiesService extends IService<Authorities> {
     List<Authorities> listByRoleIds(@Param("roleIds") List<Integer> roleIds);
 
     List<Authorities> listByRoleId(Integer roleId);
+
+    /**
+     * 获取权限树
+     *
+     * @return
+     */
+    List<Authorities> getAuthorities();
 }
