@@ -106,7 +106,7 @@ public class User implements Serializable {
     /**
      * 部门id
      */
-    private Integer departmentId;
+    private String departmentId;
 
     /**
      * 描述
@@ -251,11 +251,11 @@ public class User implements Serializable {
         this.address = address;
     }
 
-    public Integer getDepartmentId() {
+    public String getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(Integer departmentId) {
+    public void setDepartmentId(String departmentId) {
         this.departmentId = departmentId;
     }
 

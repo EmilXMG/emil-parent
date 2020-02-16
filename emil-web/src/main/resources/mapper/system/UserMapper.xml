@@ -22,6 +22,9 @@
             <if test="page.pageData.state!=null">
                 and a.state =#{page.pageData.state}
             </if>
+            <if test="page.pageData.rowGuid!=null and page.pageData.rowGuid!='EMILROOT'">
+                and department_id = '${page.pageData.rowGuid}'
+            </if>
         </where>
     </select>
 </mapper>

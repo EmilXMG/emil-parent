@@ -25,6 +25,22 @@
             border-radius: 50%;
             border: 2px solid #dddddd;
         }
+
+        #treeTbTree {
+            height: 470px;
+            overflow: auto;
+        }
+
+        @media screen and (max-width: 768px) {
+            #treeTbTree {
+                height: auto;
+            }
+        }
+
+        /** dtree选中颜色重写 */
+        .dtree-theme-item-this {
+            background-color: #eeeeee !important;
+        }
     </style>
 </head>
 <body>
@@ -36,36 +52,48 @@
 </div>
 <!-- 正文开始 -->
 <div class="layui-fluid">
-    <div class="layui-card">
-        <div class="layui-card-body table-tool-mini full-table" id="layPhotosTbImg">
-            <!-- 表格顶部工具栏 -->
-            <div class="layui-form toolbar">
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label w-auto">姓名：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="nickName" class="layui-input" type="text" placeholder="输入姓名"/>
+    <div class="layui-row layui-col-space15">
+        <!-- 左树 -->
+        <div class="layui-col-sm12 layui-col-md4 layui-col-lg3">
+            <div class="layui-card">
+                <div class="layui-card-header">选择部门</div>
+                <div class="layui-card-body mini-bar" id="treeTbTree"></div>
+            </div>
+        </div>
+        <!-- 右表 -->
+        <div class="layui-col-sm12 layui-col-md8 layui-col-lg9">
+            <div class="layui-card">
+                <div class="layui-card-body table-tool-mini full-table" id="layPhotosTbImg">
+                    <!-- 表格顶部工具栏 -->
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto">姓名：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input name="nickName" class="layui-input" type="text" placeholder="输入姓名"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto">账号：</label>
+                                <div class="layui-input-inline mr0">
+                                    <input name="username" class="layui-input" type="text" placeholder="输入账号"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn icon-btn" lay-filter="searchSubmit" lay-submit>
+                                    <i class="layui-icon">&#xe615;</i>搜索
+                                </button>
+                                <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label w-auto">账号：</label>
-                        <div class="layui-input-inline mr0">
-                            <input name="username" class="layui-input" type="text" placeholder="输入账号"/>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <button class="layui-btn icon-btn" lay-filter="searchSubmit" lay-submit>
-                            <i class="layui-icon">&#xe615;</i>搜索
-                        </button>
-                        <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
-                    </div>
+                    <table class="layui-table" id="userTable" lay-filter="userTable"></table>
                 </div>
             </div>
-            <table class="layui-table" id="userTable" lay-filter="userTable"></table>
         </div>
     </div>
 </div>
-
 <!-- 表格操作列 -->
 <script type="text/html" id="tableBar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
@@ -81,6 +109,15 @@
 <script type="text/html" id="modelUser">
     <form id="modelUserForm" lay-filter="modelUserForm" class="layui-form model-form">
         <input name="userId" type="hidden"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">部门</label>
+            <div class="layui-input-block">
+                <ul id="departmentTree" class="dtree" data-id="0"></ul>
+                <input type="text" id="departmentId" name="departmentId" autocomplete="off"
+                       class="layui-input layui-hide" lay-verify="required"
+                       lay-reqtext="部门不能为空!">
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label layui-form-required">账号</label>
             <div class="layui-input-block">
@@ -122,7 +159,7 @@
 <!-- js部分 -->
 <% include("../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin', 'formSelects', 'tableX'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'formSelects', 'tableX', 'dtree'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -131,6 +168,7 @@
         var admin = layui.admin;
         var formSelects = layui.formSelects;
         var tableX = layui.tableX;
+        var dtree = layui.dtree;
 
         // 渲染表格
         var insTb = table.render({
@@ -138,12 +176,12 @@
             url: 'user/list',
             page: true,
             toolbar: true,
-            height:'full-100',
+            height: 'full-100',
             cellMinWidth: 100,
             cols: [[
                 {type: 'numbers'},
                 {
-                    title: '头像', width: 90, align: 'center', templet: function (d) {
+                    title: '头像', width: 70, align: 'center', templet: function (d) {
                         // var url = d.imgUrl;
                         let url = 'https://pic.qqtn.com/up/2018-9/15367146917869444.jpg';
                         return '<img src="' + url + '" class="tdImg tb-img" />';
@@ -152,7 +190,7 @@
                 {field: 'nickName', title: '用户名', align: 'center', sort: true},
                 {field: 'username', title: '账号', align: 'center', sort: true},
                 {
-                    field: 'sex', title: '性别', width: 90, align: 'center', sort: true, templet: function (d) {
+                    field: 'sex', title: '性别', width: 80, align: 'center', sort: true, templet: function (d) {
                         if (d.sex === '女') {
                             return "<i title='女' style='color: #e96da0;font-size: 18px' class='fa fa-female' aria-hidden='true'></i>";
                         } else {
@@ -177,8 +215,8 @@
                         return util.toDateString(d.createTime);
                     }, title: '创建时间'
                 },
-                {field: 'state', templet: '#tableState', width: 100, title: '状态', align: 'center', sort: true},
-                {align: 'center', toolbar: '#tableBar', title: '操作', minWidth: 190}
+                {field: 'state', templet: '#tableState', width: 95, title: '状态', align: 'center', sort: true},
+                {align: 'center', toolbar: '#tableBar', title: '操作', minWidth: 185}
             ]],
             done: function () {
                 layer.photos({
@@ -188,6 +226,49 @@
                 });
             }
         });
+
+        // 左树
+        var tree = dtree.render({
+            elem: '#treeTbTree',
+            url: 'sysDepartment/departmentTree',
+            type: 'all',
+            initLevel: '2',
+            dot: false,
+            method: 'GET',
+            menubar: true,
+        });
+        // 树形点击事件
+        dtree.on('node("treeTbTree")', function (obj) {
+            var data = obj.param;
+            insTb.reload({where: {rowGuid: data.nodeId}}, 'data');
+        });
+
+        function renderTree(mUser) {
+            console.log(mUser);
+            var departmentId;
+            if (mUser) {
+                departmentId = mUser.departmentId;
+            } else {
+                departmentId = '';
+            }
+            dtree.renderSelect({
+                elem: "#departmentTree",
+                url: "sysDepartment/departmentTree",
+                accordion: true,
+                menubar: true,
+                initLevel: '2',
+                selectTips: "请选择部门",
+                selectCardHeight: "250",
+                selectInitVal: departmentId,
+                done: function (res, $ul, first) {
+                    if (first) {
+                    }
+                }
+            });
+            dtree.on("node('departmentTree')", function (obj) {
+                $('#departmentId').val(obj.param.nodeId);
+            });
+        }
 
         // 添加
         $('#btnAdd').click(function () {
@@ -250,6 +331,7 @@
                     });
                 }
             });
+            renderTree(mUser);
         }
 
         // 删除

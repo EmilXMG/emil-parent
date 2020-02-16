@@ -1,6 +1,10 @@
 package com.wf.ew.system.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.wf.ew.common.expand.dtree.DTree;
+import com.wf.ew.common.expand.dtree.DTreeResponse;
+import com.wf.ew.common.expand.dtree.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.wf.ew.system.service.ISysDepartmentService;
 import com.wf.ew.system.entity.SysDepartment;
@@ -15,7 +19,9 @@ import com.wf.ew.common.PageParam;
 import com.wf.ew.common.PageResult;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
@@ -78,6 +84,7 @@ public class SysDepartmentController extends BaseController {
         sysDepartment.setOperateDate(new Date());
         sysDepartment.setRowGuid(UUID.randomUUID().toString());
         sysDepartment.setOperateUserName(getLoginUser().getUsername());
+        sysDepartment.setCreateDate(new Date());
         if (sysDepartmentService.save(sysDepartment)) {
             return JsonResult.ok("添加成功");
         }
@@ -120,4 +127,51 @@ public class SysDepartmentController extends BaseController {
     public SysDepartment getSysDepartmentByRowGuid(SysDepartment sysDepartment) {
         return sysDepartmentService.getById(sysDepartment.getRowGuid());
     }
+
+    /**
+     * 查询所有部门树
+     **/
+    @ResponseBody
+    @RequestMapping("/departmentTree")
+    public String departmentTree() {
+        List<SysDepartment> departmentList = sysDepartmentService.list();
+        List<DTree> dTrees = getDepartmentTree(departmentList, "EMILROOT");
+        List<DTree> rootTree = new ArrayList<>();
+        DTree rootDtree = new DTree();
+        rootDtree.setTitle("所有部门");
+        rootDtree.setId("EMILROOT");
+        rootDtree.setChildren(dTrees);
+        rootTree.add(rootDtree);
+        DTreeResponse response = new DTreeResponse();
+        response.setData(rootTree);
+        response.setStatus(new Status());
+        return JSONObject.toJSONString(response);
+    }
+
+
+    /**
+     * 递归转化树形菜单
+     */
+    private List<DTree> getDepartmentTree(List<SysDepartment> department, String parentId) {
+        List<DTree> dTrees = new ArrayList<>();
+        DTree dTree;
+        for (int i = 0; i < department.size(); i++) {
+            SysDepartment temp = department.get(i);
+            if (parentId.equals( temp.getParentId())) {
+                dTree = new DTree();
+                dTree.setId(temp.getRowGuid());
+                dTree.setTitle(temp.getDepartmentName());
+                dTree.setChildren(getDepartmentTree(department, department.get(i).getRowGuid()));
+                dTrees.add(dTree);
+            }
+        }
+        return dTrees;
+    }
+
+//    public String eachTree(String parentGuid){
+//       SysDepartment sysDepartment =  sysDepartmentService.getById(parentGuid);
+//       if (parentGuid .equals(sysDepartment.getRowGuid())){
+//
+//       }
+//    }
 }

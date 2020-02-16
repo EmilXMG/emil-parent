@@ -9,15 +9,18 @@
 <form class="layui-form model-form">
     <div class="layui-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">上级目录：</label>
+            <label class="layui-form-label">上级部门：</label>
             <div class="layui-input-inline">
-                <input type="text" name="parentId" autocomplete="off" class="layui-input">
+                <ul id="departmentTree" class="dtree" data-id="0" ></ul>
+                <input type="text" id="parentId" name="parentId" class="layui-input layui-hide" lay-verify="required"
+                       lay-reqtext="上级部门不能为空!">
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">部门名称：</label>
             <div class="layui-input-inline">
-                <input type="text" name="departmentName" autocomplete="off" class="layui-input">
+                <input type="text" name="departmentName" autocomplete="off" class="layui-input" lay-verify="required"
+                       lay-reqtext="部门名称不能为空!">
             </div>
         </div>
         <div class="layui-inline">
@@ -44,7 +47,7 @@
 <!-- js部分 -->
 <% include("../../../../layout/js.html"){} %>
 <script>
-    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil'], function () {
+    layui.use(['layer', 'form', 'table', 'util', 'admin', 'emil', 'dtree'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -52,6 +55,25 @@
         var util = layui.util;
         var admin = layui.admin;
         var emil = layui.emil;
+        var dtree = layui.dtree;
+
+        dtree.renderSelect({
+            elem: "#departmentTree",
+            url: "departmentTree",
+            accordion: true,
+            menubar: true,
+            initLevel: '2',
+            selectTips: "请选择上级部门",
+            selectCardHeight: "250",
+            done: function (res, $ul, first) {
+                if (first) {
+                }
+            }
+        });
+
+        dtree.on("node('departmentTree')", function (obj) {
+            $('#parentId').val(obj.param.nodeId);
+        });
 
         form.on("submit(sysDepartmentAdd)", function (data) {
             layer.load(2);
@@ -59,7 +81,7 @@
                 emil.alertAndClose(res);
             }, 'json');
             return false;
-        })
+        });
     });
 </script>
 </body>

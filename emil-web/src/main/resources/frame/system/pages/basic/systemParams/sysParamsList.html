@@ -7,8 +7,17 @@
     <title>系统参数新增</title>
     <% include("../../../../layout/css.html"){} %>
     <style>
+        .layui-form-label {
+            width: 200px;
+        }
+
+        .layui-input-block {
+            margin-left: 130px;
+            min-height: 36px
+        }
+
         #treeTbTree {
-            height: 530px;
+            height: 470px;
             overflow: auto;
         }
 
@@ -39,7 +48,8 @@
         <!-- 左树 -->
         <div class="layui-col-sm12 layui-col-md4 layui-col-lg3">
             <div class="layui-card">
-                <div class="layui-card-body mini-bar" id="treeTbTree"></div>
+                <div class="layui-card-header">选择参数类型</div>
+                <div class="layui-card-body " id="treeTbTree"></div>
             </div>
         </div>
         <!-- 右表 -->
@@ -77,7 +87,9 @@
                             <th lay-data="{field:'paramName', sort: true,align:'center'}">参数名</th>
                             <th lay-data="{field:'paramValue', sort: true,align:'center'}">参数值</th>
                             <th lay-data="{field:'description', sort: true,align:'center'}">描述</th>
-                            <th lay-data="{fixed: 'right', align:'center', width:170, toolbar: '#sysParamsTableBar'}">操作</th>
+                            <th lay-data="{fixed: 'right', align:'center', width:170, toolbar: '#sysParamsTableBar'}">
+                                操作
+                            </th>
                         </tr>
                         </thead>
                     </table>
@@ -86,6 +98,41 @@
         </div>
     </div>
 </div>
+<!-- 表单弹窗 -->
+<script type="text/html" id="modeParamsCategory">
+    <form class="layui-form model-form layui-form-pane" lay-filter="sysParamsCategoryForm">
+        <input id="rowGuid" type="text" name="rowGuid" class="layui-input layui-hide">
+        <div class="layui-form-item">
+            <div class="layui-form-item">
+                <label class="layui-form-label">上级类别</label>
+                <div class="layui-input-block">
+                    <ul id="paramsCategoryTree" class="dtree" data-id="0"></ul>
+                    <input type="text" id="parentId" name="parentId" autocomplete="off" class="layui-input layui-hide"
+                           lay-verify="required" lay-reqtext="上级类别不能为空!">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">参数种类名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="categoryName" autocomplete="off" class="layui-input" lay-verify="required"
+                           lay-reqtext="参数种类名称不能为空!">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">参数种类描述</label>
+                <div class="layui-input-block">
+                    <textarea name="categoryDescription" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-row layui-col-xs12">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="sysParamsCategoryEdit">修改</button>
+                <button class="layui-btn  layui-btn-primary" ew-event="closeThisDialog">取消</button>
+            </div>
+        </div>
+    </form>
+</script>
 <!-- 表格操作列 -->
 <script type="text/html" id="sysParamsTableBar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
@@ -111,25 +158,92 @@
             table.reload('sysParamsTable', {where: data.field});
         });
 
+        dtree.on("node('paramsCategoryTree')", function (obj) {
+            $('#parentId').val(obj.param.nodeId);
+        });
         // 树形渲染
-        dtree.render({
+        var tree = dtree.render({
             elem: '#treeTbTree',
-            url: 'codeMain/dtree',
-            type: 'all',
-            initLevel: '2',
-            dot: false,
+            url: 'sysParamsCategory/paramsCategoryTree',
             method: 'GET',
             toolbar: true,
+            menubar: true,
+            toolbarShow: ["add", "delete"],
+            toolbarBtn: [
+                [
+                    {"label": "参数种类描述", "name": "categoryDescription", "type": "textarea"},
+                ]
+            ],
+            toolbarExt: [{
+                toolbarId: "testEdit", icon: "dtree-icon-bianji", title: "编辑节点", handler: function (node, $div) {
+                    $('#rowGuid').val(node.nodeId);
+                    var data = {
+                        rowGuid: node.nodeId
+                    }
+                    $.post("sysParamsCategory/getSysParamsCategoryByRowGuid", data, function (res) {
+                        // 渲染表单数据
+                        form.val('sysParamsCategoryForm', res);
+                        form.render();
+                        // 渲染下拉树
+                        dtree.renderSelect({
+                            elem: "#paramsCategoryTree",
+                            url: "sysParamsCategory/paramsCategoryTree",
+                            accordion: true,
+                            menubar: true,
+                            initLevel: '2',
+                            selectTips: "请选择上级部门",
+                            selectCardHeight: "250",
+                            selectInitVal: res.parentId,
+                            done: function (res, $ul, first) {
+                                if (first) {
+                                }
+                            }
+                        });
+                    }, 'json');
+                    // 打开编辑按钮
+                    admin.open({
+                        type: 1,
+                        title: '修改参数类型',
+                        anim: 1,
+                        area: ['700px', '410px'],
+                        content: $('#modeParamsCategory').html(),
+                        success: function (layero, dIndex) {
+                            form.on("submit(sysParamsCategoryEdit)", function (data) {
+                                $.post("sysParamsCategory/sysParamsCategoryUpdate", data.field, function (res) {
+                                    layer.closeAll('loading');
+                                    if (res.code == 200) {
+                                        layer.close(dIndex);
+                                        layer.msg(res.msg, {icon: 1});
+                                        tree.refreshTree();
+                                    } else {
+                                        layer.msg(res.msg, {icon: 2});
+                                    }
+                                }, 'json');
+                                return false;
+                            });
+                        }
+                    });
+                }
+            }],
             toolbarFun: {
                 addTreeNode: function (treeNode, $div) {
-                    console.log(treeNode);
-                    console.log($div);
-                },
-                editTreeNode: function (treeNode, $div) {
-
+                    var data = {
+                        categoryName: treeNode.context,
+                        parentId: treeNode.parentId,
+                        categoryDescription: treeNode.categoryDescription
+                    }
+                    $.post("sysParamsCategory/sysParamsCategoryAdd", data, function (res) {
+                        tree.refreshTree();
+                    }, 'json');
                 },
                 delTreeNode: function (treeNode, $div) {
-
+                    var data = [];
+                    data.push(treeNode.nodeId);
+                    $.post("sysParamsCategory/sysParamsCategoryDelete", {
+                        rowGuid: JSON.stringify(data)
+                    }, function (res) {
+                        tree.refreshTree();
+                    }, 'json');
                 }
             }
         });

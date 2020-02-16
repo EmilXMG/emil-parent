@@ -5,5 +5,13 @@
     <!--  部门列表  -->
     <select id="listFull" resultType="com.wf.ew.system.entity.SysDepartment">
         select * from sys_department
+        <where>
+            <if test="page.pageData.rowGuid!=null and page.pageData.rowGuid!='EMILROOT'">
+                and parent_id = '${page.pageData.rowGuid}'
+            </if>
+            <if test="page.pageData.departmentName!=null">
+                and department_name like '%${page.pageData.departmentName}%'
+            </if>
+        </where>
     </select>
 </mapper>
