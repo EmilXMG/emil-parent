@@ -58,15 +58,6 @@
                                     <i class="layui-icon">&#xe615;</i>搜索
                                 </button>
                             </div>
-                            <div class="layui-inline">
-                                <button id="sysDepartmentAdd" class="layui-btn icon-btn" lay-submit>
-                                    <i class="layui-icon">&#xe654;</i>新增
-                                </button>
-                            </div>
-                            <!--删除数据-->
-                            <div class="layui-inline">
-                                <a class="layui-btn layui-btn-danger layui-btn-normal delAll_btn">批量删除</a>
-                            </div>
                         </div>
                     </div>
                     <table class="layui-table" id="sysDepartmentTable" lay-filter="sysDepartmentTable"></table>
@@ -102,6 +93,10 @@
             page: true,
             cellMinWidth: 100,
             height: 'full-100',
+            toolbar: ['<p>',
+                '<button lay-event="add" class="layui-btn layui-btn-sm icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>&nbsp;',
+                '<button lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger icon-btn"><i class="layui-icon">&#xe640;</i>删除</button>',
+                '</p>'].join(''),
             cols: [[
                 {type: 'checkbox'},
                 {field: 'departmentName', title: '部门名称', sort: true, align: 'center'},
@@ -111,7 +106,6 @@
                 {align: 'center', toolbar: '#sysDepartmentTableBar', width: 120, title: '操作'}
             ]]
         });
-
 
         // 树形渲染
         var tree = dtree.render({
@@ -123,6 +117,7 @@
             method: 'GET',
             menubar: true,
         });
+
         // 树形点击事件
         dtree.on('node("treeTbTree")', function (obj) {
             var data = obj.param;
@@ -134,41 +129,7 @@
             insTb.reload({where: data.field}, 'data');
         });
 
-        //新增部门
-        $("#sysDepartmentAdd").click(function () {
-            var layIndex = admin.open({
-                type: 2,
-                title: "新增部门",
-                shade: 0.7,
-                anim: 1,
-                area: ['700px', '500px'],
-                content: "/system/sysDepartment/sysDepartmentAddPage",
-                end: function () {
-                    if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
-                        tree.refreshTree();
-                        insTb.reload();  // 成功刷新表格
-                    }
-                }
-            });
-        });
-
-        //批量删除部门
-        $(".delAll_btn").click(function () {
-            let checkStatus = table.checkStatus('sysDepartmentTable'),
-                data = checkStatus.data,
-                itemId = [];
-            if (data.length > 0) {
-                for (let i in data) {
-                    itemId.push(data[i].rowGuid);
-                }
-                deletePost(itemId);
-            } else {
-                layer.msg("请选择需要删除的数据");
-            }
-        });
-
         // 删除部门
-
         function doDel(sysDepartmentId) {
             var itemId = [];
             itemId.push(sysDepartmentId);
@@ -192,6 +153,38 @@
                 }, 'json');
             });
         }
+
+        // 表格工具条点击事件
+        table.on('toolbar(sysDepartmentTable)', function (obj) {
+            if (obj.event === 'add') { // 新增部门
+                var layIndex = admin.open({
+                    type: 2,
+                    title: "新增部门",
+                    shade: 0.7,
+                    anim: 1,
+                    area: ['700px', '500px'],
+                    content: "/system/sysDepartment/sysDepartmentAddPage",
+                    end: function () {
+                        if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
+                            tree.refreshTree();
+                            insTb.reload();  // 成功刷新表格
+                        }
+                    }
+                });
+            } else if (obj.event === 'delete') {//批量删除部门
+                let checkStatus = table.checkStatus('sysDepartmentTable'),
+                    data = checkStatus.data,
+                    itemId = [];
+                if (data.length > 0) {
+                    for (let i in data) {
+                        itemId.push(data[i].rowGuid);
+                    }
+                    deletePost(itemId);
+                } else {
+                    layer.msg('请选择要删除的数据', {icon: 0});
+                }
+            }
+        });
 
         // 工具条点击事件
         table.on('tool(sysDepartmentTable)', function (obj) {

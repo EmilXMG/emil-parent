@@ -31,11 +31,6 @@
                             <i class="layui-icon">&#xe615;</i>搜索
                         </button>
                     </div>
-                    <div class="layui-inline">
-                        <button id="${table.entityPath}Add" class="layui-btn icon-btn" lay-submit>
-                            <i class="layui-icon">&#xe654;</i>新增
-                        </button>
-                    </div>
                     <!--删除数据-->
                     <div class="layui-inline">
                         <a class="layui-btn layui-btn-danger layui-btn-normal delAll_btn">批量删除</a>
@@ -72,6 +67,10 @@
             url: '${table.entityPath}/${table.entityPath}List',
             page: true,
             cellMinWidth: 100,
+            toolbar: ['<p>',
+                '<button lay-event="add" class="layui-btn layui-btn-sm icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>&nbsp;',
+                '<button lay-event="delete" class="layui-btn layui-btn-sm layui-btn-danger icon-btn"><i class="layui-icon">&#xe640;</i>删除</button>',
+                '</p>'].join(''),
             height: 'full-100',
             cols: [[
                 {type: 'checkbox'},
@@ -87,38 +86,6 @@
         // 搜索按钮点击事件
         form.on('submit(${table.entityPath}Search)', function (data) {
             insTb.reload({where: data.field}, 'data');
-        });
-
-        //新增${table.comment!}
-        $("#${table.entityPath}Add").click(function () {
-            var layIndex = admin.open({
-                type: 2,
-                title: "新增${table.comment!}",
-                shade: 0.7,
-                anim: 1,
-                area: ['700px', '500px'],
-                content: "<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/${table.entityPath}AddPage",
-                end: function () {
-                    if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
-                        insTb.reload();  // 成功刷新表格
-                    }
-                }
-            });
-        });
-
-        //批量删除${table.comment!}
-        $(".delAll_btn").click(function () {
-            let checkStatus = table.checkStatus('${table.entityPath}Table'),
-                data = checkStatus.data,
-                itemId = [];
-            if (data.length > 0) {
-                for (let i in data) {
-                    itemId.push(data[i].rowGuid);
-                }
-                deletePost(itemId);
-            } else {
-                layer.msg("请选择需要删除的数据");
-            }
         });
 
         // 删除${table.comment!}
@@ -145,6 +112,37 @@
                 }, 'json');
             });
         }
+
+        // 表格工具条点击事件
+        table.on('tool(${table.entityPath}Table)', function (obj) {
+            if (obj.event === 'add') { //新增${table.comment!}
+                var layIndex = admin.open({
+                    type: 2,
+                    title: "新增${table.comment!}",
+                    shade: 0.7,
+                    anim: 1,
+                    area: ['700px', '500px'],
+                    content: "<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>/${table.entityPath}AddPage",
+                    end: function () {
+                        if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
+                            insTb.reload();  // 成功刷新表格
+                        }
+                    }
+                });
+            } else if (obj.event === 'delete') { //批量删除${table.comment!}
+                let checkStatus = table.checkStatus('${table.entityPath}Table'),
+                    data = checkStatus.data,
+                    itemId = [];
+                if (data.length > 0) {
+                    for (let i in data) {
+                        itemId.push(data[i].rowGuid);
+                    }
+                    deletePost(itemId);
+                } else {
+                    layer.msg("请选择需要删除的数据");
+                }
+            }
+        });
 
         // 工具条点击事件
         table.on('tool(${table.entityPath}Table)', function (obj) {

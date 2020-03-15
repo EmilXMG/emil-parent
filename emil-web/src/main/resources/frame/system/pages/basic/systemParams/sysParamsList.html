@@ -80,7 +80,10 @@
                         </div>
                     </div>
                     <table class="layui-table" lay-data="{ url:'sysParams/sysParamsList',height: 'full-100',
-            page:true,toolbar: true, id:'sysParamsTable'}" lay-filter="sysParamsTable">
+            page:true,toolbar: true, id:'sysParamsTable'}, toolbar: ['<p>',
+                '<button lay-event='add' class='layui-btn layui-btn-sm icon-btn'><i class='layui-icon'>&#xe654;</i>添加</button>&nbsp;',
+                    '<button lay-event='del' class='layui-btn layui-btn-sm layui-btn-danger icon-btn'><i class='layui-icon'>&#xe640;</i>删除</button>',
+                    '</p>'].join('')" lay-filter="sysParamsTable">
                         <thead>
                         <tr>
                             <th lay-data="{checkbox:true}"></th>

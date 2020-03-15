@@ -2,7 +2,7 @@
 
     <div class="layui-logo">
         <img src="${ctxPath}/assets/images/logo.png"/>
-        <cite>&nbsp;高血压防治管理</cite>
+        <cite>&nbsp;emil_web</cite>
     </div>
 
     <ul class="layui-nav layui-layout-left">
@@ -16,7 +16,12 @@
 
     <ul class="layui-nav layui-layout-right">
         <li class="layui-nav-item" lay-unselect>
-            <a ew-event="message" data-url="${ctxPath}/tpl/message" title="消息"><i class="layui-icon layui-icon-notice"></i><span class="layui-badge-dot"></span></a>
+            <a ew-event="message" data-url="${ctxPath}/tpl/message" title="消息"><i
+                    class="layui-icon layui-icon-notice"></i><span class="layui-badge-dot"></span></a>
+        </li>
+        <li class="layui-nav-item" lay-unselect>
+            <a href="/system/sysDepartment/sysDepartmentEditPage" title="聊天"><i
+                    class="layui-icon layui-icon-dialogue"></i><span class="layui-badge-dot"></span></a>
         </li>
         <li class="layui-nav-item" lay-unselect>
             <a ew-event="note" data-url="${ctxPath}/tpl/note" title="便签"><i class="layui-icon layui-icon-note"></i></a>
@@ -25,10 +30,12 @@
             <a ew-event="fullScreen" title="全屏"><i class="layui-icon layui-icon-screen-full"></i></a>
         </li>
         <li class="layui-nav-item layui-hide-xs" lay-unselect>
-            <a ew-event="lockScreen" data-url="${ctxPath}/tpl/lock-screen" title="锁屏"><i class="layui-icon layui-icon-password"></i></a>
+            <a ew-event="lockScreen" data-url="${ctxPath}/tpl/lock-screen" title="锁屏"><i
+                    class="layui-icon layui-icon-password"></i></a>
         </li>
         <li class="layui-nav-item" lay-unselect>
-            <a><img src="${ctxPath}/assets/images/head.png" class="layui-nav-img"><cite>${loginUser.nickName!}</cite></a>
+            <a><img src="${ctxPath}/assets/images/head.png"
+                    class="layui-nav-img"><cite>${loginUser.nickName!}</cite></a>
             <dl class="layui-nav-child">
                 <dd lay-unselect><a ew-href="/tpl/userCenter">个人信息</a></dd>
                 <dd lay-unselect><a ew-event="psw" data-url="${ctxPath}/tpl/password">修改密码</a></dd>
@@ -37,7 +44,8 @@
             </dl>
         </li>
         <li class="layui-nav-item" lay-unselect>
-            <a ew-event="theme" data-url="${ctxPath}/tpl/theme" title="主题"><i class="layui-icon layui-icon-more-vertical"></i></a>
+            <a ew-event="theme" data-url="${ctxPath}/tpl/theme" title="主题"><i
+                    class="layui-icon layui-icon-more-vertical"></i></a>
         </li>
     </ul>
 </div>

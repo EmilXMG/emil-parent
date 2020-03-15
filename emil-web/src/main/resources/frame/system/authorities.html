@@ -22,9 +22,6 @@
                     </div>
                     <div class="layui-inline">
                         <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
-                        <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
-                        <button id="btnExpandAuth" class="layui-btn icon-btn">全部展开</button>
-                        <button id="btnFoldAuth" class="layui-btn icon-btn">全部折叠</button>
                     </div>
                 </div>
             </div>
@@ -121,6 +118,11 @@
                 elem: '#authTable',
                 url: 'authorities/list',
                 cellMinWidth: 100,
+                toolbar: ['<p>',
+                    '<button lay-event="add" class="layui-btn layui-btn-sm icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>&nbsp;',
+                    '<button lay-event="expandAuth" class="layui-btn layui-btn-sm icon-btn"><i class="layui-icon">&#xe654;</i>全部展开</button>&nbsp;',
+                    '<button lay-event="foldAuth" class="layui-btn layui-btn-sm icon-btn"><i class="layui-icon">&#xe654;</i>全部折叠</button>&nbsp;',
+                    '</p>'].join(''),
                 cols: [[
                     {type: 'numbers'},
                     {field: 'authorityName', title: '菜单/权限名称', minWidth: 200},
@@ -207,6 +209,17 @@
         // 添加按钮点击事件
         $('#btnAdd').click(function () {
             showEditModel();
+        });
+
+        /* 表格头工具栏点击事件 */
+        table.on('toolbar(authTable)', function (obj) {
+            if (obj.event === 'add') { // 添加
+                showEditModel();
+            } else if (obj.event === 'expandAuth') { //展开树形表格
+                treetable.expandAll('#authTable');
+            } else if (obj.event === 'foldAuth') {//折叠树形表格
+                treetable.foldAll('#authTable');
+            }
         });
 
         // 工具条点击事件
@@ -328,16 +341,6 @@
                 treetable.expandAll('#authTable');
             }
         });
-
-        //展开树形表格
-        $('#btnExpandAuth').click(function () {
-            treetable.expandAll('#authTable');
-        });
-        //折叠树形表格
-        $('#btnFoldAuth').click(function () {
-            treetable.foldAll('#authTable');
-        });
-
     });
 </script>
 

@@ -63,7 +63,7 @@
         <!-- 右表 -->
         <div class="layui-col-sm12 layui-col-md8 layui-col-lg9">
             <div class="layui-card">
-                <div class="layui-card-body table-tool-mini full-table" id="layPhotosTbImg">
+                <div class="layui-card-body full-table" id="layPhotosTbImg">
                     <!-- 表格顶部工具栏 -->
                     <div class="layui-form toolbar">
                         <div class="layui-form-item">
@@ -82,8 +82,6 @@
                             <div class="layui-inline">
                                 <button class="layui-btn icon-btn" lay-filter="searchSubmit" lay-submit>
                                     <i class="layui-icon">&#xe615;</i>搜索
-                                </button>
-                                <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加
                                 </button>
                             </div>
                         </div>
@@ -178,6 +176,9 @@
             toolbar: true,
             height: 'full-100',
             cellMinWidth: 100,
+            toolbar: ['<p>',
+                '<button lay-event="add" class="layui-btn layui-btn-sm icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>&nbsp;',
+                '</p>'].join(''),
             cols: [[
                 {type: 'numbers'},
                 {
@@ -270,13 +271,16 @@
             });
         }
 
-        // 添加
-        $('#btnAdd').click(function () {
-            showEditModel();
-        });
         // 搜索
         form.on('submit(searchSubmit)', function (data) {
             insTb.reload({where: data.field, page: {curr: 1}});
+        });
+
+        /* 表格头工具栏点击事件 */
+        table.on('toolbar(userTable)', function (obj) {
+            if (obj.event === 'add') { // 添加
+                showEditModel();
+            }
         });
 
         // 工具条点击事件
@@ -394,8 +398,7 @@
                 }, 'json');
             });
         }
-    })
-    ;
+    });
 </script>
 
 </body>

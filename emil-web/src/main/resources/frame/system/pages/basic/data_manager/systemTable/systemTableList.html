@@ -71,10 +71,6 @@
                                 <button class="layui-btn icon-btn" lay-filter="systemTableSearch" lay-submit>
                                     <i class="layui-icon">&#xe615;</i>搜索
                                 </button>
-                                <button id="systemTableAdd" class="layui-btn icon-btn" lay-filter="codeMainSubmit"
-                                        lay-submit>
-                                    <i class="layui-icon">&#xe654;</i>新增
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -110,6 +106,10 @@
             page: true,
             cellMinWidth: 100,
             height: 'full-100',
+            toolbar: ['<p>',
+                '<button lay-event="add" class="layui-btn layui-btn-sm icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>&nbsp;',
+                '<button lay-event="del" class="layui-btn layui-btn-sm layui-btn-danger icon-btn"><i class="layui-icon">&#xe640;</i>删除</button>',
+                '</p>'].join(''),
             cols: [[
                 {type: 'checkbox'},
                 {field: 'tableName', align: 'center', sort: true, edit: 'text', title: '数据表中文名'},
@@ -154,28 +154,6 @@
             insTb.reload({where: data.field}, 'data');
         });
 
-        $("#systemTableAdd").click(function () {
-            var subsystem = emil.getValue('subsystem_num');
-            if (subsystem === '' || subsystem === 'EMILROOT') {
-                layer.msg('请选择子系统！', {icon: 0});
-                return false;
-            }
-            var layIndex = admin.open({
-                type: 2,
-                title: "新增数据表",
-                shadeClose: true,
-                shade: 0.7,
-                anim: 1,
-                area: ['700px', '500px'],
-                content: "/system/table-basicinfo/systemTableAddPage?subsystemId=" + $('#subsystem_num').val(),
-                end: function () {
-                    if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
-                        insTb.reload();  // 成功刷新表格
-                    }
-                }
-            });
-        });
-
         // 删除数据表
         function doDel(tableId, tableName) {
             layer.confirm('确定要删除“' + tableName + '”吗？', {
@@ -197,6 +175,31 @@
                 }, 'json');
             });
         }
+
+        /* 表格头工具栏点击事件 */
+        table.on('toolbar(tableSystemTable)', function (obj) {
+            if (obj.event === 'add') { // 添加
+                var subsystem = emil.getValue('subsystem_num');
+                if (subsystem === '' || subsystem === 'EMILROOT') {
+                    layer.msg('请选择子系统！', {icon: 0});
+                    return false;
+                }
+                var layIndex = admin.open({
+                    type: 2,
+                    title: "新增数据表",
+                    shadeClose: true,
+                    shade: 0.7,
+                    anim: 1,
+                    area: ['700px', '500px'],
+                    content: "/system/table-basicinfo/systemTableAddPage?subsystemId=" + $('#subsystem_num').val(),
+                    end: function () {
+                        if (admin.getLayerData(layIndex, 'formOk')) {  // 判断表单操作成功标识
+                            insTb.reload();  // 成功刷新表格
+                        }
+                    }
+                });
+            }
+        });
 
         // 工具条点击事件
         table.on('tool(tableSystemTable)', function (obj) {
