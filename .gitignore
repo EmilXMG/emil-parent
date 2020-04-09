@@ -1,7 +1,4 @@
 # Project exclude paths
-/emil-common/target/
-/emil-controller/target/
-/emil-entity/target/
-/emil-mapper/target/
-/emil-service/target/
-/emil-web/target/
+target/
+.idea/
+*.iml
